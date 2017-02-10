@@ -11,6 +11,7 @@ const (
 	Token_String
 	Token_WhiteSpace
 	Token_Identifier
+	Token_Comment
 	Token_Colon       // :
 	Token_ParenL      // (
 	Token_ParenR      // )
@@ -35,6 +36,7 @@ func newSProtoParser() *sprotoParser {
 
 	l.AddIgnoreMatcher(golexer.NewWhiteSpaceMatcher(Token_WhiteSpace))
 	l.AddIgnoreMatcher(golexer.NewLineEndMatcher(Token_LineEnd))
+	l.AddIgnoreMatcher(golexer.NewUnixStyleCommentMatcher(Token_Comment))
 
 	l.AddMatcher(golexer.NewSignMatcher(Token_CurlyBraceL, "{"))
 	l.AddMatcher(golexer.NewSignMatcher(Token_CurlyBraceR, "}"))

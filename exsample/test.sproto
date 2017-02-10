@@ -20,8 +20,14 @@
     person 0 : *Person
 }
 
+
+# Full sytax of sproto
+
+
 .MyData{
-	type 0: string
+	name 0: string
+	type 1: integer
+	int32 2: int32	# extend standard
 }
 
 .MyProfile{

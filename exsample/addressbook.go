@@ -31,7 +31,11 @@ type AddressBook struct {
 }
 
 type MyData struct {
-	Type string `sproto:"string,0,name=Type"`
+	Name string `sproto:"string,0,name=Name"`
+
+	Type int `sproto:"integer,1,name=Type"`
+
+	Int32 int32 `sproto:"integer,2,name=Int32"`
 }
 
 type MyProfile struct {

@@ -43,7 +43,8 @@ var SProtoStructs = []reflect.Type{
 
 `
 
-func publicName(name string) string {
+// 字段首字母大写
+func publicFieldName(name string) string {
 	return strings.ToUpper(string(name[0])) + name[1:]
 }
 
@@ -52,8 +53,9 @@ type fieldModel struct {
 }
 
 func (self *fieldModel) FieldName() string {
-	pname := publicName(self.Name)
+	pname := publicFieldName(self.Name)
 
+	// 碰到关键字在尾部加_
 	if token.Lookup(pname).IsKeyword() {
 		return pname + "_"
 	}
@@ -72,15 +74,14 @@ func (self *fieldModel) GoTypeName() string {
 		b.WriteString("*")
 	}
 
+	// 字段类型映射go的类型
 	switch self.Type {
 	case meta.FieldType_Integer:
 		b.WriteString("int")
-	case meta.FieldType_String:
-		b.WriteString("string")
-	case meta.FieldType_Bool:
-		b.WriteString("bool")
 	case meta.FieldType_Struct:
 		b.WriteString(self.Complex.Name)
+	default:
+		b.WriteString(self.Type.String())
 	}
 
 	return b.String()
@@ -92,7 +93,17 @@ func (self *fieldModel) GoTags() string {
 
 	b.WriteString("`sproto:\"")
 
-	b.WriteString(self.Kind())
+	// 整形类型对解码层都视为整形
+	switch self.Type {
+	case meta.FieldType_Int32,
+		meta.FieldType_Int64,
+		meta.FieldType_UInt32,
+		meta.FieldType_UInt64:
+		b.WriteString("integer")
+	default:
+		b.WriteString(self.Kind())
+	}
+
 	b.WriteString(",")
 
 	b.WriteString(fmt.Sprintf("%d", self.Tag))
@@ -187,8 +198,9 @@ func gen_go(pool []*meta.FileDescriptor, packageName, filename string) {
 	}
 }
 
+// Reformat generated code.
 func formatCode(bf *bytes.Buffer) error {
-	// Reformat generated code.
+
 	fset := token.NewFileSet()
 
 	ast, err := parser.ParseFile(fset, "", bf, parser.ParseComments)

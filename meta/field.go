@@ -1,18 +1,6 @@
 package meta
 
-import (
-	"fmt"
-)
-
-type FieldType int
-
-const (
-	FieldType_None = iota
-	FieldType_Integer
-	FieldType_Bool
-	FieldType_String
-	FieldType_Struct
-)
+import "fmt"
 
 type FieldDescriptor struct {
 	Name      string
@@ -42,45 +30,28 @@ func (self *FieldDescriptor) String() string {
 }
 
 func (self *FieldDescriptor) Kind() string {
-	switch self.Type {
-	case FieldType_Bool:
-		return "bool"
-	case FieldType_Integer:
-		return "integer"
-	case FieldType_String:
-		return "string"
-	case FieldType_Struct:
-		return "struct"
-	}
 
-	return "!none!"
+	return self.Type.String()
 }
 
 func (self *FieldDescriptor) TypeName() string {
 
 	switch self.Type {
-	case FieldType_Bool:
-		return "bool"
-	case FieldType_Integer:
-		return "integer"
-	case FieldType_String:
-		return "string"
+
 	case FieldType_Struct:
 		return self.Complex.Name
+	default:
+		return self.Type.String()
 	}
 
-	return "!none!"
 }
 
 func (self *FieldDescriptor) parseType(name string) (ft FieldType, structType *Descriptor) {
 
-	switch name {
-	case "integer":
-		return FieldType_Integer, nil
-	case "string":
-		return FieldType_String, nil
-	case "bool":
-		return FieldType_Bool, nil
+	ft = ParseFieldType(name)
+
+	if ft != FieldType_None {
+		return ft, nil
 	}
 
 	if d, ok := self.Struct.File.StructByName[name]; ok {
