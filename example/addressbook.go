@@ -2,7 +2,7 @@
 // DO NOT EDIT!
 // Source: test.sproto
 
-package exsample
+package example
 
 import (
 	"reflect"

@@ -1,4 +1,4 @@
-package exsample
+package example
 
 import (
 	"reflect"

@@ -43,15 +43,23 @@ https://github.com/davyxu/gosproto/tree/master/meta
 
 https://github.com/davyxu/gosproto/tree/master/sprotogen
 
+## Install
+
+```
+	go get -u -v github.com/davyxu/gosproto/sprotogen
+```
+
 ## Usage
 
-```golang
-	go get -u -v github.com/davyxu/gosproto/sprotogen
+```
+	# generate go source file
+	sprotogen --type=go --out=addressbook.go --gopackage=example test.sproto
+	
 ```
 
 # Exsample
 
-https://github.com/davyxu/gosproto/tree/master/exsample
+https://github.com/davyxu/gosproto/tree/master/example
 
 ```golang
 	input := &AddressBook{
