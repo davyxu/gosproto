@@ -29,7 +29,7 @@ type spFileModel struct {
 
 func gen_sproto(fileD *meta.FileDescriptor, filename string) {
 
-	tpl, err := template.New("sproto_go").Parse(spCodeTemplate)
+	tpl, err := template.New("sproto_sproto").Parse(spCodeTemplate)
 	if err != nil {
 		fmt.Println("template error ", err.Error())
 		os.Exit(1)

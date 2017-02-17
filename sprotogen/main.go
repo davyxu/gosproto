@@ -40,6 +40,8 @@ func main() {
 		gen_go(fileD, *paramGoPackage, *paramOut)
 	case "sproto":
 		gen_sproto(fileD, *paramOut)
+	case "csharp":
+		gen_csharp(fileD, *paramGoPackage, *paramOut)
 	default:
 		fmt.Println("unknown out file type: ", *paramType)
 		os.Exit(1)
