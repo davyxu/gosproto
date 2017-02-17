@@ -57,7 +57,31 @@ https://github.com/davyxu/gosproto/tree/master/sprotogen
 	
 ```
 
-# Exsample
+# Protobuf Schema --> sproto Schema convertor
+
+https://github.com/davyxu/gosproto/tree/master/pb2sproto
+
+## Install
+
+```
+	go get -u -v github.com/davyxu/gosproto/pb2sproto
+```
+
+## Usage
+
+```
+	# Use protoc and github.com/davyxu/pbmeta/protoc-gen-meta to generate protobuf meta info file(contains comments)
+	# see github.com/davyxu/gosproto/pb2sproto/Make.bat
+	
+	# Use meta info to generate sproto file
+	pb2sproto --pbmeta=meta.pb --outdir=.	
+	
+```
+
+## Remark
+Due to sproto not support float field type, all float double format will convert to int32 type
+
+# Example
 
 https://github.com/davyxu/gosproto/tree/master/example
 

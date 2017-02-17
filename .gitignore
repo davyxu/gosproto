@@ -1,3 +1,5 @@
 meta/*.exe
 example/*.exe
 sprotogen/*.exe
+pb2sproto/*.exe
+pb2sproto/meta.pb

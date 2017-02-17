@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package gamedef;
+
+//  This is phone number
+message PhoneNumber {
+			
+	string Number = 1; // mobile phone number
+	
+	int32 Type = 2; // phone type
+}
+
+// Person
+message Person {
+		
+	string Name = 1;
+			
+	int32 Id = 2;
+		
+	string Email = 3;	
+		
+	repeated PhoneNumber phone = 4;	
+	
+}
+
+// All person list
+message AddressBook {
+		
+	repeated Person person = 1;
+	
+}
+
