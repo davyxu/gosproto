@@ -19,6 +19,7 @@ func ParseFile(fileName string) (fileD *FileDescriptor, retErr error) {
 
 	fileD, retErr = ParseString(string(data))
 	if retErr != nil {
+		fmt.Printf("parse %s failed\n", fileName)
 		return
 	}
 
@@ -36,7 +37,7 @@ func ParseString(data string) (fileD *FileDescriptor, retErr error) {
 
 		line, _ := p.TokenPos()
 
-		fmt.Printf("line %d", line)
+		fmt.Printf("line %d \n", line)
 
 		retErr = err
 
@@ -55,6 +56,8 @@ func ParseString(data string) (fileD *FileDescriptor, retErr error) {
 		p.NextToken()
 
 	}
+
+	p.resolveAll()
 
 	return fileD, nil
 }

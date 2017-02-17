@@ -23,6 +23,15 @@ const (
 
 type sprotoParser struct {
 	*golexer.Parser
+
+	unknownFields []*parsingField
+}
+
+func (self *sprotoParser) resolveAll() {
+
+	for _, v := range self.unknownFields {
+		v.resolve(2)
+	}
 }
 
 func newSProtoParser() *sprotoParser {

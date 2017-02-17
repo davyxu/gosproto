@@ -3,7 +3,7 @@ package meta
 type FieldType int
 
 const (
-	FieldType_None = iota
+	FieldType_None FieldType = iota
 	FieldType_Integer
 	FieldType_Int32
 	FieldType_Int64

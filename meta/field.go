@@ -13,25 +13,58 @@ type FieldDescriptor struct {
 	Struct *Descriptor
 }
 
-func (self *FieldDescriptor) String() string {
+func (self *FieldDescriptor) TypeString() string {
+	return self.typeStr(false)
+}
 
-	var starStr string
+func (self *FieldDescriptor) CompatibleTypeString() string {
+	return self.typeStr(true)
+}
+
+func (self *FieldDescriptor) typeStr(compatible bool) (ret string) {
 
 	if self.Repeatd {
-		starStr = "*"
+		ret = "*"
 	}
 
-	var indexStr string
+	if compatible {
+		ret += self.CompatibleTypeName()
+	} else {
+		ret += self.TypeName()
+	}
+
 	if self.MainIndex != nil {
-		indexStr = fmt.Sprintf("(%s)", self.MainIndex.Name)
+		ret += fmt.Sprintf("(%s)", self.MainIndex.Name)
 	}
 
-	return fmt.Sprintf("%s %d : %s%s%s", self.Name, self.Tag, starStr, self.TypeName(), indexStr)
+	return
+}
+
+func (self *FieldDescriptor) String() string {
+
+	return fmt.Sprintf("%s %d : %s", self.Name, self.Tag, self.TypeString())
 }
 
 func (self *FieldDescriptor) Kind() string {
 
 	return self.Type.String()
+}
+
+func (self *FieldDescriptor) CompatibleTypeName() string {
+
+	switch self.Type {
+
+	case FieldType_Struct:
+		return self.Complex.Name
+	case FieldType_Int32,
+		FieldType_Int64,
+		FieldType_UInt32,
+		FieldType_UInt64:
+		return FieldType_Integer.String()
+	default:
+		return self.Type.String()
+	}
+
 }
 
 func (self *FieldDescriptor) TypeName() string {

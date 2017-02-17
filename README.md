@@ -52,8 +52,11 @@ https://github.com/davyxu/gosproto/tree/master/sprotogen
 ## Usage
 
 ```
-	# generate go source file
-	sprotogen --type=go --out=addressbook.go --gopackage=example test.sproto
+	# Generate go source file by sproto
+	sprotogen --type=go --out=addressbook.go --gopackage=example addressbook.sp
+
+	# Convert to standard sproto file
+	sprotogen --type=sproto --out=addressbook.sproto addressbook.sp
 	
 ```
 
@@ -61,11 +64,15 @@ https://github.com/davyxu/gosproto/tree/master/sprotogen
 
 https://github.com/davyxu/gosproto/tree/master/pb2sproto
 
+## Features
+Keep all message leading comments and field trailing comments
+
 ## Install
 
 ```
 	go get -u -v github.com/davyxu/gosproto/pb2sproto
 ```
+Requires: github.com/davyxu/pbmeta
 
 ## Usage
 

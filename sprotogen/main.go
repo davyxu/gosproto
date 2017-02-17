@@ -23,7 +23,7 @@ func mergeSchema(filelist []string) (ret []*meta.FileDescriptor) {
 		fileD, err := meta.ParseFile(filename)
 
 		if err != nil {
-			fmt.Println("parse failed, ", err.Error())
+			fmt.Println(err.Error())
 			os.Exit(1)
 		}
 
@@ -42,6 +42,8 @@ func main() {
 	switch *paramType {
 	case "go":
 		gen_go(fileDList, *paramGoPackage, *paramOut)
+	case "sproto":
+		gen_sproto(fileDList, *paramOut)
 	default:
 		fmt.Println("unknown out file type: ", *paramType)
 		os.Exit(1)
