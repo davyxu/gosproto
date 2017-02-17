@@ -9,7 +9,7 @@ func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
 	// .
 	p.Expect(Token_Dot)
 
-	d := NewDescriptor(fileD)
+	d := newDescriptor(fileD)
 
 	// 名字
 	d.Name = p.Expect(Token_Identifier).Value()

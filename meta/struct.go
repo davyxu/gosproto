@@ -37,7 +37,7 @@ func (self *Descriptor) AddField(fd *FieldDescriptor) {
 	self.FieldByName[fd.Name] = fd
 }
 
-func NewDescriptor(f *FileDescriptor) *Descriptor {
+func newDescriptor(f *FileDescriptor) *Descriptor {
 	return &Descriptor{
 		File:        f,
 		FieldByName: make(map[string]*FieldDescriptor),

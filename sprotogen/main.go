@@ -12,38 +12,34 @@ var paramOut = flag.String("out", "", "output filename")
 var paramGoPackage = flag.String("gopackage", "", "package name in go files")
 var paramType = flag.String("type", "", "output file type")
 
-func mergeSchema(filelist []string) (ret []*meta.FileDescriptor) {
+func mergeSchema(filelist []string) *meta.FileDescriptor {
 
 	if len(filelist) == 0 {
 		fmt.Println("require sproto file")
 		os.Exit(1)
 	}
 
-	for _, filename := range filelist {
-		fileD, err := meta.ParseFile(filename)
-
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-
-		ret = append(ret, fileD)
+	fileD := meta.NewFileDescriptor()
+	errorFileName, err := meta.ParseFileList(fileD, filelist)
+	if err != nil {
+		fmt.Println(errorFileName, err.Error())
+		os.Exit(1)
 	}
 
-	return
+	return fileD
 }
 
 func main() {
 
 	flag.Parse()
 
-	fileDList := mergeSchema(flag.Args())
+	fileD := mergeSchema(flag.Args())
 
 	switch *paramType {
 	case "go":
-		gen_go(fileDList, *paramGoPackage, *paramOut)
+		gen_go(fileD, *paramGoPackage, *paramOut)
 	case "sproto":
-		gen_sproto(fileDList, *paramOut)
+		gen_sproto(fileD, *paramOut)
 	default:
 		fmt.Println("unknown out file type: ", *paramType)
 		os.Exit(1)

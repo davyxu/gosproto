@@ -7,7 +7,7 @@ import (
 
 func TestParser(t *testing.T) {
 
-	fileD, err := ParseFile("../exsample/test.sproto")
+	fileD, err := ParseFile("../example/addressbook.sp")
 
 	if err != nil {
 		t.Log(err)

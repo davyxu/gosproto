@@ -7,16 +7,22 @@ type parsingField struct {
 	mainIndexName string
 
 	fd *FieldDescriptor
+
+	miss bool
 }
 
-func (self *parsingField) resolve(pass int) bool {
+func (self *parsingField) resolve(pass int) (bool, error) {
+
+	self.fd.Type, self.fd.Complex = self.fd.parseType(self.typeName)
 
 	if self.fd.Type == FieldType_None {
 		if pass > 1 {
 
-			panic(errors.New("type not found: " + self.typeName))
+			return true, errors.New("type not found: " + self.typeName)
 		} else {
-			return false
+
+			self.miss = true
+			return true, nil
 		}
 	}
 
@@ -25,20 +31,20 @@ func (self *parsingField) resolve(pass int) bool {
 			self.fd.MainIndex = indexFd
 		} else {
 			if pass > 1 {
-				panic(errors.New("Main index not found:" + self.typeName))
+				return true, errors.New("Main index not found:" + self.typeName)
 			} else {
-				return false
+				return true, nil
 			}
 
 		}
 	}
 
-	return true
+	return false, nil
 }
 
 func parseField(p *sprotoParser, d *Descriptor) {
 
-	fd := NewFieldDescriptor(d)
+	fd := newFieldDescriptor(d)
 
 	// 字段名
 	fd.Name = p.Expect(Token_Identifier).Value()
@@ -73,7 +79,6 @@ func parseField(p *sprotoParser, d *Descriptor) {
 	}
 
 	// 根据类型名查找类型及结构体类型
-	fd.Type, fd.Complex = fd.parseType(typeName)
 
 	pf := &parsingField{typeName: typeName, fd: fd}
 
@@ -90,8 +95,8 @@ func parseField(p *sprotoParser, d *Descriptor) {
 	// )
 
 	// 尝试首次解析
-	if !pf.resolve(1) {
-		p.unknownFields = append(p.unknownFields)
+	if need2Pass, _ := pf.resolve(1); need2Pass {
+		d.File.unknownFields = append(d.File.unknownFields, pf)
 	}
 
 	d.AddField(fd)

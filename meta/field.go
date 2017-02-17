@@ -95,7 +95,7 @@ func (self *FieldDescriptor) parseType(name string) (ft FieldType, structType *D
 
 }
 
-func NewFieldDescriptor(d *Descriptor) *FieldDescriptor {
+func newFieldDescriptor(d *Descriptor) *FieldDescriptor {
 	return &FieldDescriptor{
 		Struct: d,
 	}

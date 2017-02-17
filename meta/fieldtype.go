@@ -1,5 +1,9 @@
 package meta
 
+import (
+	"fmt"
+)
+
 type FieldType int
 
 const (
@@ -48,5 +52,5 @@ func (self FieldType) String() string {
 		return v
 	}
 
-	return "none"
+	return fmt.Sprintf("none(%d)", self)
 }

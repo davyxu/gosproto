@@ -3,10 +3,22 @@ package meta
 import "bytes"
 
 type FileDescriptor struct {
-	FileName string
-	Structs  []*Descriptor
+	Structs []*Descriptor
 
 	StructByName map[string]*Descriptor
+
+	unknownFields []*parsingField
+}
+
+func (self *FileDescriptor) resolveAll() error {
+
+	for _, v := range self.unknownFields {
+		if _, err := v.resolve(2); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (self *FileDescriptor) String() string {
