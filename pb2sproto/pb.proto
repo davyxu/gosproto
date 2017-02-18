@@ -18,8 +18,10 @@ message Person {
 	int32 Id = 2;
 		
 	string Email = 3;	
-		
+	
 	repeated PhoneNumber phone = 4;	
+	
+	bool Staff = 5;
 	
 }
 

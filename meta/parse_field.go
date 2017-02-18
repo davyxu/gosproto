@@ -1,6 +1,11 @@
 package meta
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+
+	"github.com/davyxu/golexer"
+)
 
 type parsingField struct {
 	typeName      string
@@ -8,7 +13,18 @@ type parsingField struct {
 
 	fd *FieldDescriptor
 
+	d *Descriptor
+
+	tp golexer.TokenPos
+
 	miss bool
+}
+
+func newParsingField(typeName string, fd *FieldDescriptor, d *Descriptor, tp golexer.TokenPos) *parsingField {
+	return &parsingField{typeName: typeName,
+		fd: fd,
+		d:  d,
+		tp: tp}
 }
 
 func (self *parsingField) resolve(pass int) (bool, error) {
@@ -17,6 +33,8 @@ func (self *parsingField) resolve(pass int) (bool, error) {
 
 	if self.fd.Type == FieldType_None {
 		if pass > 1 {
+
+			fmt.Println(self.tp.String())
 
 			return true, errors.New("type not found: " + self.typeName)
 		} else {
@@ -69,6 +87,8 @@ func parseField(p *sprotoParser, d *Descriptor) (fpt fieldParseType) {
 
 		p.NextToken()
 
+		tp := p.TokenPos()
+
 		var typeName string
 
 		switch p.TokenID() {
@@ -90,7 +110,7 @@ func parseField(p *sprotoParser, d *Descriptor) (fpt fieldParseType) {
 
 		// 根据类型名查找类型及结构体类型
 
-		pf := &parsingField{typeName: typeName, fd: fd}
+		pf := newParsingField(typeName, fd, d, tp)
 
 		// map的索引解析 (
 		if p.TokenID() == Token_ParenL {
@@ -118,7 +138,20 @@ func parseField(p *sprotoParser, d *Descriptor) (fpt fieldParseType) {
 
 	}
 
-	d.AddField(fd)
+	checkField(d, fd)
+
+	d.addField(fd)
 
 	return
+}
+
+func checkField(d *Descriptor, fd *FieldDescriptor) {
+
+	if _, ok := d.FieldByName[fd.Name]; ok {
+		panic(errors.New(fmt.Sprintf("Duplicate field name: %s in %s", fd.Name, d.Name)))
+	}
+
+	if _, ok := d.FieldByTag[fd.Tag]; ok {
+		panic(errors.New(fmt.Sprintf("Duplicate field tag: %d in %s", fd.Tag, d.Name)))
+	}
 }

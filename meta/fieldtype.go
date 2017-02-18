@@ -20,7 +20,7 @@ const (
 )
 
 var fieldtypeByStr = map[string]FieldType{
-	"bool":    FieldType_Bool,
+	"boolean": FieldType_Bool,
 	"integer": FieldType_Integer,
 	"int32":   FieldType_Int32,
 	"int64":   FieldType_Int64,

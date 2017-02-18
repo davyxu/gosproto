@@ -53,7 +53,7 @@ func (self *fieldModel) TypeString() (ret string) {
 	case pbprotos.FieldDescriptorProto_TYPE_UINT32:
 		ret += "uint32"
 	case pbprotos.FieldDescriptorProto_TYPE_BOOL:
-		ret += "bool"
+		ret += "boolean"
 	case pbprotos.FieldDescriptorProto_TYPE_STRING:
 		ret += "string"
 	case pbprotos.FieldDescriptorProto_TYPE_MESSAGE:

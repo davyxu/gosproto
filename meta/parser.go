@@ -34,7 +34,7 @@ func ParseString(data string) (*FileDescriptor, error) {
 
 	fileD := NewFileDescriptor()
 
-	if err := rawParse(fileD, data); err != nil {
+	if err := rawParse(fileD, data, data); err != nil {
 		return nil, err
 	}
 
@@ -49,19 +49,17 @@ func rawPaseFile(fileD *FileDescriptor, fileName string) error {
 		return err
 	}
 
-	return rawParse(fileD, string(data))
+	return rawParse(fileD, string(data), fileName)
 }
 
 // 解析字符串
-func rawParse(fileD *FileDescriptor, data string) (retErr error) {
+func rawParse(fileD *FileDescriptor, data string, srcName string) (retErr error) {
 
-	p := newSProtoParser()
+	p := newSProtoParser(srcName)
 
 	defer golexer.ErrorCatcher(func(err error) {
 
-		line, _ := p.TokenPos()
-
-		fmt.Printf("line %d \n", line)
+		fmt.Printf("%s %s\n", p.TokenPos().String(), err.Error())
 
 		retErr = err
 

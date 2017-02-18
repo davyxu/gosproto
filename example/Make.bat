@@ -13,4 +13,4 @@ sprotogen --type=go --out=addressbook.go --gopackage=example addressbook.sp
 sprotogen --type=sproto --out=addressbook.sproto addressbook.sp
 
 : Generate c# source file by sproto
-sprotogen --type=csharp --out=addressbook.cs --gopackage=example addressbook.sp
+sprotogen --type=cs --out=addressbook.cs --gopackage=example addressbook.sp

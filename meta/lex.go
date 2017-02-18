@@ -25,7 +25,7 @@ type sprotoParser struct {
 	*golexer.Parser
 }
 
-func newSProtoParser() *sprotoParser {
+func newSProtoParser(srcName string) *sprotoParser {
 
 	l := golexer.NewLexer()
 
@@ -51,6 +51,6 @@ func newSProtoParser() *sprotoParser {
 	l.AddMatcher(golexer.NewUnknownMatcher(Token_Unknown))
 
 	return &sprotoParser{
-		Parser: golexer.NewParser(l),
+		Parser: golexer.NewParser(l, srcName),
 	}
 }

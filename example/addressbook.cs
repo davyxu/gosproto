@@ -7,13 +7,13 @@ using System.Collections.Generic;
 namespace example
 {
 
-	enum MyCar {
+	public enum MyCar {
 		
-		Monkey = 1;
+		Monkey = 1,
 		
-		Monk = 2;
+		Monk = 2,
 		
-		Pig = 3;
+		Pig = 3,
 		
 	}
 
@@ -81,8 +81,8 @@ namespace example
 			get { return base.has_field.has_field(0); }
 		}
 		
-		private unknown _type; // tag 1
-		public unknown type {
+		private MyCar _type; // tag 1
+		public MyCar type {
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
 		}
@@ -116,7 +116,7 @@ namespace example
 					break;
 				
 				case 1:
-					this.type = base.deserialize.read_unknown();
+					this.type = base.deserialize.read_enum<MyCar>();
 					break;
 				
 				case 2:
@@ -139,7 +139,7 @@ namespace example
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_unknown(this.type, 1);
+				base.serialize.write_enum(this.type, 1);
 			}
 			
 			if (base.has_field.has_field (2)) {
@@ -152,7 +152,7 @@ namespace example
 	}
 
 	public class MyProfile : SprotoTypeBase {
-		private static int max_field_count = 3;
+		private static int max_field_count = 4;
 		
 		
 		private MyData _nameField; // tag 1
@@ -173,8 +173,8 @@ namespace example
 			get { return base.has_field.has_field(1); }
 		}
 		
-		private Dictionary<unknown,MyData> _nameMap; // tag 3
-		public Dictionary<unknown,MyData> nameMap {
+		private Dictionary<MyCar,MyData> _nameMap; // tag 3
+		public Dictionary<MyCar,MyData> nameMap {
 			get{ return _nameMap; }
 			set{ base.has_field.set_field(2,true); _nameMap = value; }
 		}
@@ -203,7 +203,7 @@ namespace example
 					break;
 				
 				case 3:
-					this.nameMap = base.deserialize.read_map<unknown,MyData>(v => v.type);
+					this.nameMap = base.deserialize.read_map<MyCar,MyData>(v => v.type);
 					break;
 				
 				default:

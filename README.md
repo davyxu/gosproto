@@ -54,6 +54,9 @@ https://github.com/davyxu/gosproto/tree/master/sprotogen
 ```
 	# Generate go source file by sproto
 	sprotogen --type=go --out=addressbook.go --gopackage=example addressbook.sp
+	
+	# Generate c# source file by sproto
+	sprotogen --type=cs --out=addressbook.cs --gopackage=example addressbook.sp
 
 	# Convert to standard sproto file
 	sprotogen --type=sproto --out=addressbook.sproto addressbook.sp

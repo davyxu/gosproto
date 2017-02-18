@@ -21,16 +21,16 @@ using System.Collections.Generic;
 namespace {{.PackageName}}
 {
 {{range $a, $enumobj := .Enums}}
-	enum {{.Name}} {
+	public enum {{.Name}} {
 		{{range .CSFields}}
-		{{.Name}} = {{.Tag}};
+		{{.Name}} = {{.Tag}},
 		{{end}}
 	}
 {{end}}
 
 {{range .Structs}}
 	public class {{.Name}} : SprotoTypeBase {
-		private static int max_field_count = {{.FieldCount}};
+		private static int max_field_count = {{.MaxFieldCount}};
 		
 		{{range .CSFields}}
 		private {{.CSTypeString}} _{{.Name}}; // tag {{.Tag}}
@@ -106,7 +106,15 @@ func (self *csharpFieldModel) CSTemplate() string {
 
 	var buf bytes.Buffer
 
-	if self.Type == meta.FieldType_Struct {
+	var needTemplate bool
+
+	switch self.Type {
+	case meta.FieldType_Struct,
+		meta.FieldType_Enum:
+		needTemplate = true
+	}
+
+	if needTemplate {
 		buf.WriteString("<")
 	}
 
@@ -115,7 +123,7 @@ func (self *csharpFieldModel) CSTemplate() string {
 		buf.WriteString(",")
 	}
 
-	if self.Type == meta.FieldType_Struct {
+	if needTemplate {
 		buf.WriteString(self.Complex.Name)
 		buf.WriteString(">")
 	}
@@ -174,6 +182,8 @@ func (self *csharpFieldModel) serializer() string {
 		baseName = "boolean"
 	case meta.FieldType_Struct:
 		baseName = "obj"
+	case meta.FieldType_Enum:
+		baseName = "enum"
 	default:
 		baseName = "unknown"
 	}
@@ -202,7 +212,8 @@ func csharpTypeName(fd *meta.FieldDescriptor) string {
 		return "string"
 	case meta.FieldType_Bool:
 		return "bool"
-	case meta.FieldType_Struct:
+	case meta.FieldType_Struct,
+		meta.FieldType_Enum:
 		return fd.Complex.Name
 	}
 	return "unknown"
