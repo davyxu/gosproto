@@ -78,7 +78,7 @@ func decodeInt(val *uint16, data []byte, sf *SprotoField, v reflect.Value) error
 		}
 	}
 	e := v.Type()
-	v.Set(reflect.New(e).Elem())
+	//v.Set(reflect.New(e).Elem())
 	switch e.Kind() {
 	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
 		v.SetInt(int64(n))

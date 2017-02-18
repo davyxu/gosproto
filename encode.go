@@ -101,7 +101,7 @@ func extractInt(v reflect.Value) (n uint64, sz int) {
 		n = v.Uint()
 		sz = 4
 	default: //case reflect.Uint32, reflect.Uint64, reflect.Uint:
-		n := v.Uint()
+		n = v.Uint()
 		if n <= MaxInt32 {
 			sz = 4
 		} else {

@@ -69,7 +69,7 @@ namespace example
 	}
 
 	public class MyData : SprotoTypeBase {
-		private static int max_field_count = 3;
+		private static int max_field_count = 7;
 		
 		
 		private string _name; // tag 0
@@ -99,6 +99,33 @@ namespace example
 			get { return base.has_field.has_field(2); }
 		}
 		
+		private UInt32 _uint32; // tag 4
+		public UInt32 uint32 {
+			get{ return _uint32; }
+			set{ base.has_field.set_field(3,true); _uint32 = value; }
+		}
+		public bool HasUint32{
+			get { return base.has_field.has_field(3); }
+		}
+		
+		private Int64 _int64; // tag 5
+		public Int64 int64 {
+			get{ return _int64; }
+			set{ base.has_field.set_field(4,true); _int64 = value; }
+		}
+		public bool HasInt64{
+			get { return base.has_field.has_field(4); }
+		}
+		
+		private UInt64 _uint64; // tag 6
+		public UInt64 uint64 {
+			get{ return _uint64; }
+			set{ base.has_field.set_field(5,true); _uint64 = value; }
+		}
+		public bool HasUint64{
+			get { return base.has_field.has_field(5); }
+		}
+		
 		
 		public MyData() : base(max_field_count) {}
 		
@@ -123,6 +150,18 @@ namespace example
 					this.int32 = base.deserialize.read_int32();
 					break;
 				
+				case 4:
+					this.uint32 = base.deserialize.read_uint32();
+					break;
+				
+				case 5:
+					this.int64 = base.deserialize.read_int64();
+					break;
+				
+				case 6:
+					this.uint64 = base.deserialize.read_uint64();
+					break;
+				
 				default:
 					base.deserialize.read_unknow_data ();
 					break;
@@ -144,6 +183,18 @@ namespace example
 			
 			if (base.has_field.has_field (2)) {
 				base.serialize.write_int32(this.int32, 2);
+			}
+			
+			if (base.has_field.has_field (3)) {
+				base.serialize.write_uint32(this.uint32, 4);
+			}
+			
+			if (base.has_field.has_field (4)) {
+				base.serialize.write_int64(this.int64, 5);
+			}
+			
+			if (base.has_field.has_field (5)) {
+				base.serialize.write_uint64(this.uint64, 6);
 			}
 			
 

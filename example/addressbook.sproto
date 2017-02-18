@@ -35,6 +35,12 @@
 	type 1 : enum
 		
 	int32 2 : integer
+		
+	uint32 4 : integer
+		
+	int64 5 : integer
+		
+	uint64 6 : integer
 	
 }
 

@@ -1,6 +1,7 @@
 package example
 
 import (
+	"math"
 	"reflect"
 	"testing"
 
@@ -31,17 +32,29 @@ var abData []byte = []byte{
 
 func TestMyProfile(t *testing.T) {
 
-	input := &MyProfile{
-		NameField: &MyData{
-			Name: "jinkin",
-			Type: MyCar_Pig,
-		},
+	input := &MyData{
+		Name:   "genji",
+		Type:   MyCar_Pig,
+		Uint32: math.MaxUint32,
+		Int64:  math.MaxInt64,
+		Uint64: math.MaxUint64,
 	}
 
-	var my MyProfile
+	var my MyData
 
 	encodeDecodeCompare(t, input, &my)
-	t.Log(my.NameField)
+
+	assert(t, input.Name == "genji")
+	assert(t, input.Type == MyCar_Pig)
+	assert(t, input.Uint32 == math.MaxUint32)
+	assert(t, input.Int64 == math.MaxInt64)
+	assert(t, input.Uint64 == math.MaxUint64)
+}
+
+func assert(t *testing.T, condition bool) {
+	if !condition {
+		t.FailNow()
+	}
 }
 
 func TestAddressBook(t *testing.T) {
@@ -88,6 +101,7 @@ func TestAddressBook(t *testing.T) {
 
 func encodeDecodeCompare(t *testing.T, input, sample interface{}) []byte {
 	data, err := sproto.Encode(input)
+	//t.Log(data)
 
 	if err != nil {
 		t.Log(err)

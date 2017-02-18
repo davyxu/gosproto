@@ -43,6 +43,12 @@ type MyData struct {
 	Type MyCar `sproto:"integer,1,name=Type"`
 
 	Int32 int32 `sproto:"integer,2,name=Int32"`
+
+	Uint32 uint32 `sproto:"integer,4,name=Uint32"`
+
+	Int64 int64 `sproto:"integer,5,name=Int64"`
+
+	Uint64 uint64 `sproto:"integer,6,name=Uint64"`
 }
 
 type MyProfile struct {

@@ -34,6 +34,9 @@
 	name 0: string
 	type 1: MyCar
 	int32 2: int32	# extend standard
+	uint32 4: uint32
+	int64 5: int64
+	uint64 6: uint64
 }
 
 .MyProfile{
