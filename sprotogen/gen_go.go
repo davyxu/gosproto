@@ -23,6 +23,15 @@ import (
 	"reflect"
 )
 
+{{range $a, $enumobj := .Enums}}
+type {{.Name}} int32
+const (
+	{{range .GoFields}}
+	{{$enumobj.Name}}_{{.Name}} {{$enumobj.Name}} = {{.Tag}}
+	{{end}}
+)
+{{end}}
+
 {{range .Structs}}
 type {{.Name}} struct{
 	{{range .GoFields}}
@@ -66,7 +75,7 @@ func (self *goFieldModel) GoTypeName() string {
 		b.WriteString("[]")
 	}
 
-	if self.Complex != nil {
+	if self.Type == meta.FieldType_Struct {
 		b.WriteString("*")
 	}
 
@@ -74,7 +83,8 @@ func (self *goFieldModel) GoTypeName() string {
 	switch self.Type {
 	case meta.FieldType_Integer:
 		b.WriteString("int")
-	case meta.FieldType_Struct:
+	case meta.FieldType_Struct,
+		meta.FieldType_Enum:
 		b.WriteString(self.Complex.Name)
 	default:
 		b.WriteString(self.Type.String())
@@ -94,7 +104,8 @@ func (self *goFieldModel) GoTags() string {
 	case meta.FieldType_Int32,
 		meta.FieldType_Int64,
 		meta.FieldType_UInt32,
-		meta.FieldType_UInt64:
+		meta.FieldType_UInt64,
+		meta.FieldType_Enum:
 		b.WriteString("integer")
 	default:
 		b.WriteString(self.Kind())
@@ -127,23 +138,14 @@ type goFileModel struct {
 
 	Structs []*goStructModel
 
+	Enums []*goStructModel
+
 	PackageName string
 }
 
-func gen_go(fileD *meta.FileDescriptor, packageName, filename string) {
+func addGoStruct(descs []*meta.Descriptor, callback func(*goStructModel)) {
 
-	tpl, err := template.New("sproto_go").Parse(goCodeTemplate)
-	if err != nil {
-		fmt.Println("template error ", err.Error())
-		os.Exit(1)
-	}
-
-	fm := &goFileModel{
-		FileDescriptor: fileD,
-		PackageName:    packageName,
-	}
-
-	for _, st := range fileD.Structs {
+	for _, st := range descs {
 
 		stModel := &goStructModel{
 			Descriptor: st,
@@ -159,9 +161,31 @@ func gen_go(fileD *meta.FileDescriptor, packageName, filename string) {
 
 		}
 
-		fm.Structs = append(fm.Structs, stModel)
+		callback(stModel)
 
 	}
+}
+
+func gen_go(fileD *meta.FileDescriptor, packageName, filename string) {
+
+	tpl, err := template.New("sproto_go").Parse(goCodeTemplate)
+	if err != nil {
+		fmt.Println("template error ", err.Error())
+		os.Exit(1)
+	}
+
+	fm := &goFileModel{
+		FileDescriptor: fileD,
+		PackageName:    packageName,
+	}
+
+	addGoStruct(fileD.Structs, func(stModel *goStructModel) {
+		fm.Structs = append(fm.Structs, stModel)
+	})
+
+	addGoStruct(fileD.Enums, func(stModel *goStructModel) {
+		fm.Enums = append(fm.Enums, stModel)
+	})
 
 	var bf bytes.Buffer
 

@@ -20,6 +20,13 @@ using System.Collections.Generic;
 
 namespace {{.PackageName}}
 {
+{{range $a, $enumobj := .Enums}}
+	enum {{.Name}} {
+		{{range .CSFields}}
+		{{.Name}} = {{.Tag}};
+		{{end}}
+	}
+{{end}}
 
 {{range .Structs}}
 	public class {{.Name}} : SprotoTypeBase {
@@ -242,6 +249,7 @@ type csharpFileModel struct {
 	*meta.FileDescriptor
 
 	Structs []*csharpStructModel
+	Enums   []*csharpStructModel
 
 	PackageName string
 }
@@ -262,20 +270,9 @@ func (self *csharpFileModel) Less(i, j int) bool {
 	return a.Name < b.Name
 }
 
-func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
+func addCSStruct(descs []*meta.Descriptor, callback func(*csharpStructModel)) {
 
-	tpl, err := template.New("sproto_csharp").Parse(csharpCodeTemplate)
-	if err != nil {
-		fmt.Println("template error ", err.Error())
-		os.Exit(1)
-	}
-
-	fm := &csharpFileModel{
-		FileDescriptor: fileD,
-		PackageName:    packageName,
-	}
-
-	for _, st := range fileD.Structs {
+	for _, st := range descs {
 
 		stModel := &csharpStructModel{
 			Descriptor: st,
@@ -292,9 +289,31 @@ func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
 
 		}
 
-		fm.Structs = append(fm.Structs, stModel)
+		callback(stModel)
 
 	}
+}
+
+func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
+
+	tpl, err := template.New("sproto_csharp").Parse(csharpCodeTemplate)
+	if err != nil {
+		fmt.Println("template error ", err.Error())
+		os.Exit(1)
+	}
+
+	fm := &csharpFileModel{
+		FileDescriptor: fileD,
+		PackageName:    packageName,
+	}
+
+	addCSStruct(fileD.Structs, func(stModel *csharpStructModel) {
+		fm.Structs = append(fm.Structs, stModel)
+	})
+
+	addCSStruct(fileD.Enums, func(stModel *csharpStructModel) {
+		fm.Enums = append(fm.Enums, stModel)
+	})
 
 	sort.Sort(fm)
 
@@ -304,10 +323,6 @@ func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
 	if err != nil {
 		fmt.Println("template error ", err.Error())
 		os.Exit(1)
-	}
-
-	if err != nil {
-		fmt.Println("format error ", err.Error())
 	}
 
 	if fileErr := ioutil.WriteFile(filename, bf.Bytes(), 666); fileErr != nil {

@@ -29,6 +29,21 @@ var abData []byte = []byte{
 	56, 57, 48,
 }
 
+func TestMyProfile(t *testing.T) {
+
+	input := &MyProfile{
+		NameField: &MyData{
+			Name: "jinkin",
+			Type: MyCar_Pig,
+		},
+	}
+
+	var my MyProfile
+
+	encodeDecodeCompare(t, input, &my)
+	t.Log(my.NameField)
+}
+
 func TestAddressBook(t *testing.T) {
 
 	for _, tp := range SProtoStructs {
@@ -39,7 +54,7 @@ func TestAddressBook(t *testing.T) {
 		Person: []*Person{
 			&Person{
 				Name: "Alice",
-				Id:   10000,
+				Id:   int32(10000),
 				Phone: []*PhoneNumber{
 					&PhoneNumber{
 						Number: "123456789",
@@ -53,17 +68,25 @@ func TestAddressBook(t *testing.T) {
 			},
 			&Person{
 				Name: "Bob",
-				Id:   20000,
+				Id:   int32(20000),
 				Phone: []*PhoneNumber{
 					&PhoneNumber{
 						Number: "01234567890",
-						Type:   3,
+						Type:   int32(3),
 					},
 				},
 			},
 		},
 	}
 
+	data := encodeDecodeCompare(t, input, new(AddressBook))
+
+	if !reflect.DeepEqual(abData, data) {
+		t.FailNow()
+	}
+}
+
+func encodeDecodeCompare(t *testing.T, input, sample interface{}) []byte {
 	data, err := sproto.Encode(input)
 
 	if err != nil {
@@ -71,16 +94,17 @@ func TestAddressBook(t *testing.T) {
 		t.FailNow()
 	}
 
-	var sample AddressBook
-	_, err = sproto.Decode(data, &sample)
+	_, err = sproto.Decode(data, sample)
 
 	if err != nil {
 		t.Log(err)
 		t.FailNow()
 	}
 
-	if !reflect.DeepEqual(abData, data) || !reflect.DeepEqual(&sample, input) {
+	if !reflect.DeepEqual(sample, input) {
+		t.Log("deep equal failed", input)
 		t.FailNow()
 	}
 
+	return data
 }

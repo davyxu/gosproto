@@ -91,6 +91,10 @@ func (self *FieldDescriptor) parseType(name string) (ft FieldType, structType *D
 		return FieldType_Struct, d
 	}
 
+	if d, ok := self.Struct.File.EnumByName[name]; ok {
+		return FieldType_Enum, d
+	}
+
 	return FieldType_None, nil
 
 }

@@ -16,6 +16,7 @@ const (
 	FieldType_Bool
 	FieldType_String
 	FieldType_Struct
+	FieldType_Enum
 )
 
 var fieldtypeByStr = map[string]FieldType{
@@ -27,6 +28,7 @@ var fieldtypeByStr = map[string]FieldType{
 	"uint64":  FieldType_UInt64,
 	"string":  FieldType_String,
 	"struct":  FieldType_Struct,
+	"enum":    FieldType_Enum,
 }
 
 var strByFieldtype = map[FieldType]string{}

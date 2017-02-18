@@ -7,15 +7,15 @@ import (
 	"github.com/davyxu/golexer"
 )
 
-func ParseFile(fileName string) error {
+func ParseFile(fileName string) (*FileDescriptor, error) {
 	fileD := NewFileDescriptor()
 
 	err := rawPaseFile(fileD, fileName)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return fileD.resolveAll()
+	return fileD, fileD.resolveAll()
 }
 
 func ParseFileList(fileD *FileDescriptor, filelist []string) (string, error) {
@@ -30,15 +30,15 @@ func ParseFileList(fileD *FileDescriptor, filelist []string) (string, error) {
 
 }
 
-func ParseString(data string) error {
+func ParseString(data string) (*FileDescriptor, error) {
 
 	fileD := NewFileDescriptor()
 
 	if err := rawParse(fileD, data); err != nil {
-		return err
+		return nil, err
 	}
 
-	return fileD.resolveAll()
+	return fileD, fileD.resolveAll()
 }
 
 // 从文件解析

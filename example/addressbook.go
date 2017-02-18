@@ -7,16 +7,26 @@ import (
 	"reflect"
 )
 
+type MyCar int32
+
+const (
+	MyCar_Monkey MyCar = 1
+
+	MyCar_Monk MyCar = 2
+
+	MyCar_Pig MyCar = 3
+)
+
 type PhoneNumber struct {
 	Number string `sproto:"string,0,name=Number"`
 
-	Type int `sproto:"integer,1,name=Type"`
+	Type int32 `sproto:"integer,1,name=Type"`
 }
 
 type Person struct {
 	Name string `sproto:"string,0,name=Name"`
 
-	Id int `sproto:"integer,1,name=Id"`
+	Id int32 `sproto:"integer,1,name=Id"`
 
 	Email string `sproto:"string,2,name=Email"`
 
@@ -30,7 +40,7 @@ type AddressBook struct {
 type MyData struct {
 	Name string `sproto:"string,0,name=Name"`
 
-	Type int `sproto:"integer,1,name=Type"`
+	Type MyCar `sproto:"integer,1,name=Type"`
 
 	Int32 int32 `sproto:"integer,2,name=Int32"`
 }

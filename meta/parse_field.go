@@ -42,7 +42,15 @@ func (self *parsingField) resolve(pass int) (bool, error) {
 	return false, nil
 }
 
-func parseField(p *sprotoParser, d *Descriptor) {
+type fieldParseType int
+
+const (
+	fieldParseType_None fieldParseType = iota
+	fieldParseType_StructField
+	fieldParseType_EnumField
+)
+
+func parseField(p *sprotoParser, d *Descriptor) (fpt fieldParseType) {
 
 	fd := newFieldDescriptor(d)
 
@@ -57,47 +65,60 @@ func parseField(p *sprotoParser, d *Descriptor) {
 	fd.Tag = p.Expect(Token_Numeral).ToInt()
 
 	// :
-	p.Expect(Token_Colon)
+	if p.TokenID() == Token_Colon {
 
-	var typeName string
-
-	switch p.TokenID() {
-	// 数组
-	case Token_Star:
 		p.NextToken()
 
-		fd.Repeatd = true
+		var typeName string
 
-		typeName = p.Expect(Token_Identifier).Value()
+		switch p.TokenID() {
+		// 数组
+		case Token_Star:
+			p.NextToken()
 
-	case Token_Identifier:
-		// 普通字段
-		typeName = p.TokenValue()
-		p.NextToken()
-		break
-	default:
-	}
+			fd.Repeatd = true
 
-	// 根据类型名查找类型及结构体类型
+			typeName = p.Expect(Token_Identifier).Value()
 
-	pf := &parsingField{typeName: typeName, fd: fd}
+		case Token_Identifier:
+			// 普通字段
+			typeName = p.TokenValue()
+			p.NextToken()
+			break
+		default:
+		}
 
-	// map的索引解析 (
-	if p.TokenID() == Token_ParenL {
-		p.NextToken()
+		// 根据类型名查找类型及结构体类型
 
-		// 索引的字段
-		pf.mainIndexName = p.Expect(Token_Identifier).Value()
+		pf := &parsingField{typeName: typeName, fd: fd}
 
-		p.Expect(Token_ParenR)
+		// map的索引解析 (
+		if p.TokenID() == Token_ParenL {
+			p.NextToken()
 
-	}
-	// )
+			// 索引的字段
+			pf.mainIndexName = p.Expect(Token_Identifier).Value()
 
-	// 尝试首次解析
-	if need2Pass, _ := pf.resolve(1); need2Pass {
-		d.File.unknownFields = append(d.File.unknownFields, pf)
+			p.Expect(Token_ParenR)
+
+		}
+		// )
+
+		// 尝试首次解析
+		if need2Pass, _ := pf.resolve(1); need2Pass {
+			d.File.unknownFields = append(d.File.unknownFields, pf)
+		}
+
+		fpt = fieldParseType_StructField
+	} else {
+
+		fd.Type = FieldType_Int32
+
+		fpt = fieldParseType_EnumField
+
 	}
 
 	d.AddField(fd)
+
+	return
 }

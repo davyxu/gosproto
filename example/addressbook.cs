@@ -7,6 +7,17 @@ using System.Collections.Generic;
 namespace example
 {
 
+	enum MyCar {
+		
+		Monkey = 1;
+		
+		Monk = 2;
+		
+		Pig = 3;
+		
+	}
+
+
 
 	public class AddressBook : SprotoTypeBase {
 		private static int max_field_count = 1;
@@ -70,8 +81,8 @@ namespace example
 			get { return base.has_field.has_field(0); }
 		}
 		
-		private Int64 _type; // tag 1
-		public Int64 type {
+		private unknown _type; // tag 1
+		public unknown type {
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
 		}
@@ -79,8 +90,8 @@ namespace example
 			get { return base.has_field.has_field(1); }
 		}
 		
-		private Int64 _int32; // tag 2
-		public Int64 int32 {
+		private Int32 _int32; // tag 2
+		public Int32 int32 {
 			get{ return _int32; }
 			set{ base.has_field.set_field(2,true); _int32 = value; }
 		}
@@ -105,11 +116,11 @@ namespace example
 					break;
 				
 				case 1:
-					this.type = base.deserialize.read_integer();
+					this.type = base.deserialize.read_unknown();
 					break;
 				
 				case 2:
-					this.int32 = base.deserialize.read_integer();
+					this.int32 = base.deserialize.read_int32();
 					break;
 				
 				default:
@@ -128,11 +139,11 @@ namespace example
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_integer(this.type, 1);
+				base.serialize.write_unknown(this.type, 1);
 			}
 			
 			if (base.has_field.has_field (2)) {
-				base.serialize.write_integer(this.int32, 2);
+				base.serialize.write_int32(this.int32, 2);
 			}
 			
 
@@ -162,8 +173,8 @@ namespace example
 			get { return base.has_field.has_field(1); }
 		}
 		
-		private Dictionary<Int64,MyData> _nameMap; // tag 3
-		public Dictionary<Int64,MyData> nameMap {
+		private Dictionary<unknown,MyData> _nameMap; // tag 3
+		public Dictionary<unknown,MyData> nameMap {
 			get{ return _nameMap; }
 			set{ base.has_field.set_field(2,true); _nameMap = value; }
 		}
@@ -192,7 +203,7 @@ namespace example
 					break;
 				
 				case 3:
-					this.nameMap = base.deserialize.read_map<Int64,MyData>(v => v.type);
+					this.nameMap = base.deserialize.read_map<unknown,MyData>(v => v.type);
 					break;
 				
 				default:
@@ -236,8 +247,8 @@ namespace example
 			get { return base.has_field.has_field(0); }
 		}
 		
-		private Int64 _id; // tag 1
-		public Int64 id {
+		private Int32 _id; // tag 1
+		public Int32 id {
 			get{ return _id; }
 			set{ base.has_field.set_field(1,true); _id = value; }
 		}
@@ -280,7 +291,7 @@ namespace example
 					break;
 				
 				case 1:
-					this.id = base.deserialize.read_integer();
+					this.id = base.deserialize.read_int32();
 					break;
 				
 				case 2:
@@ -307,7 +318,7 @@ namespace example
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_integer(this.id, 1);
+				base.serialize.write_int32(this.id, 1);
 			}
 			
 			if (base.has_field.has_field (2)) {
@@ -336,8 +347,8 @@ namespace example
 			get { return base.has_field.has_field(0); }
 		}
 		
-		private Int64 _type; // tag 1
-		public Int64 type {
+		private Int32 _type; // tag 1
+		public Int32 type {
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
 		}
@@ -362,7 +373,7 @@ namespace example
 					break;
 				
 				case 1:
-					this.type = base.deserialize.read_integer();
+					this.type = base.deserialize.read_int32();
 					break;
 				
 				default:
@@ -381,7 +392,7 @@ namespace example
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_integer(this.type, 1);
+				base.serialize.write_int32(this.type, 1);
 			}
 			
 

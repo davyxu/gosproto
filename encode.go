@@ -202,6 +202,7 @@ func encodeIntSlice(sf *SprotoField, v reflect.Value) []byte {
 }
 
 func encodeStructSlice(sf *SprotoField, v reflect.Value) []byte {
+
 	sz := 0
 	vals := make([][]byte, v.Len())
 	for i := 0; i < v.Len(); i++ {

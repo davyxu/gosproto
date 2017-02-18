@@ -107,13 +107,23 @@ func (sf *SprotoField) setEncAndDec(f *reflect.StructField) error {
 		sf.enc = encodeString
 		sf.dec = decodeString
 		sf.assertWire(WireBytesName, false)
-	case reflect.Struct:
-		stype = t1.Elem()
-		sf.headerEnc = headerEncodeDefault
-		sf.enc = encodeStruct
-		sf.dec = decodeStruct
-		err = sf.assertWire(WireStructName, false)
-
+		//	case reflect.Struct:
+		//		stype = t1.Elem()
+		//		sf.headerEnc = headerEncodeDefault
+		//		sf.enc = encodeStruct
+		//		sf.dec = decodeStruct
+		//		err = sf.assertWire(WireStructName, false)
+	case reflect.Ptr:
+		switch t2 := t1.Elem(); t2.Kind() {
+		case reflect.Struct:
+			stype = t1.Elem()
+			sf.headerEnc = headerEncodeDefault
+			sf.enc = encodeStruct
+			sf.dec = decodeStruct
+			err = sf.assertWire(WireStructName, false)
+		default:
+			err = fmt.Errorf("sproto: field(%s) no coders for %s -> %s", sf.Name, t1.Kind().String(), t2.Kind().String())
+		}
 	case reflect.Slice:
 		switch t2 := t1.Elem(); t2.Kind() {
 		case reflect.Bool:
