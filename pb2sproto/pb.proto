@@ -2,6 +2,14 @@ syntax = "proto3";
 
 package gamedef;
 
+
+enum MyCar {
+	Monkey =	0;
+	Monk =	1;
+	Pig  =	2;
+}
+
+
 //  This is phone number
 message PhoneNumber {
 			

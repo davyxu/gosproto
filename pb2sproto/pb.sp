@@ -2,6 +2,19 @@
 # Source: pb.proto
 
 
+
+.MyCar {
+		
+	Monkey 0
+		
+	Monk 1
+		
+	Pig 2
+	
+}
+
+
+
 # This is phone number
 .PhoneNumber {
 		
@@ -22,7 +35,7 @@
 		
 	phone 4 : *PhoneNumber 
 		
-	Staff 5 : bool 
+	Staff 5 : boolean 
 	
 }
 
