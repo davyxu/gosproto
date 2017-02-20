@@ -4,10 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"go/token"
-	"io/ioutil"
-	"os"
 	"sort"
-	"text/template"
 
 	"github.com/davyxu/gosproto/meta"
 )
@@ -307,12 +304,6 @@ func addCSStruct(descs []*meta.Descriptor, callback func(*csharpStructModel)) {
 
 func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
 
-	tpl, err := template.New("sproto_csharp").Parse(csharpCodeTemplate)
-	if err != nil {
-		fmt.Println("template error ", err.Error())
-		os.Exit(1)
-	}
-
 	fm := &csharpFileModel{
 		FileDescriptor: fileD,
 		PackageName:    packageName,
@@ -328,16 +319,6 @@ func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
 
 	sort.Sort(fm)
 
-	var bf bytes.Buffer
+	generateCode("sp->cs", csharpCodeTemplate, filename, fm, nil)
 
-	err = tpl.Execute(&bf, fm)
-	if err != nil {
-		fmt.Println("template error ", err.Error())
-		os.Exit(1)
-	}
-
-	if fileErr := ioutil.WriteFile(filename, bf.Bytes(), 666); fileErr != nil {
-		fmt.Println("write file error ", fileErr.Error())
-		os.Exit(1)
-	}
 }

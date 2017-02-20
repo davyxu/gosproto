@@ -3,13 +3,8 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"go/parser"
-	"go/printer"
 	"go/token"
-	"io/ioutil"
-	"os"
 	"strings"
-	"text/template"
 
 	"github.com/davyxu/gosproto/meta"
 )
@@ -83,6 +78,8 @@ func (self *goFieldModel) GoTypeName() string {
 	switch self.Type {
 	case meta.FieldType_Integer:
 		b.WriteString("int")
+	case meta.FieldType_Bool:
+		b.WriteString("bool")
 	case meta.FieldType_Struct,
 		meta.FieldType_Enum:
 		b.WriteString(self.Complex.Name)
@@ -168,12 +165,6 @@ func addGoStruct(descs []*meta.Descriptor, callback func(*goStructModel)) {
 
 func gen_go(fileD *meta.FileDescriptor, packageName, filename string) {
 
-	tpl, err := template.New("sproto_go").Parse(goCodeTemplate)
-	if err != nil {
-		fmt.Println("template error ", err.Error())
-		os.Exit(1)
-	}
-
 	fm := &goFileModel{
 		FileDescriptor: fileD,
 		PackageName:    packageName,
@@ -187,42 +178,8 @@ func gen_go(fileD *meta.FileDescriptor, packageName, filename string) {
 		fm.Enums = append(fm.Enums, stModel)
 	})
 
-	var bf bytes.Buffer
+	generateCode("sp->go", goCodeTemplate, filename, fm, &generateOption{
+		formatGoCode: true,
+	})
 
-	err = tpl.Execute(&bf, fm)
-	if err != nil {
-		fmt.Println("template error ", err.Error())
-		os.Exit(1)
-	}
-
-	err = formatCode(&bf)
-
-	if err != nil {
-		fmt.Println("format error ", err.Error())
-	}
-
-	if fileErr := ioutil.WriteFile(filename, bf.Bytes(), 666); fileErr != nil {
-		fmt.Println("write file error ", fileErr.Error())
-		os.Exit(1)
-	}
-}
-
-// Reformat generated code.
-func formatCode(bf *bytes.Buffer) error {
-
-	fset := token.NewFileSet()
-
-	ast, err := parser.ParseFile(fset, "", bf, parser.ParseComments)
-	if err != nil {
-		return err
-	}
-
-	bf.Reset()
-
-	err = (&printer.Config{Mode: printer.TabIndent | printer.UseSpaces, Tabwidth: 8}).Fprint(bf, fset, ast)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

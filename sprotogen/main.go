@@ -9,7 +9,7 @@ import (
 )
 
 var paramOut = flag.String("out", "", "output filename")
-var paramGoPackage = flag.String("gopackage", "", "package name in go files")
+var paramPackage = flag.String("package", "", "package name in go files")
 var paramType = flag.String("type", "", "output file type")
 
 func mergeSchema(filelist []string) *meta.FileDescriptor {
@@ -37,11 +37,13 @@ func main() {
 
 	switch *paramType {
 	case "go":
-		gen_go(fileD, *paramGoPackage, *paramOut)
+		gen_go(fileD, *paramPackage, *paramOut)
 	case "sproto":
 		gen_sproto(fileD, *paramOut)
 	case "cs":
-		gen_csharp(fileD, *paramGoPackage, *paramOut)
+		gen_csharp(fileD, *paramPackage, *paramOut)
+	case "lua":
+		gen_lua(fileD, *paramPackage, *paramOut)
 	default:
 		fmt.Println("unknown out file type: ", *paramType)
 		os.Exit(1)
