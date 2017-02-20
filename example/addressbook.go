@@ -5,6 +5,7 @@ package example
 
 import (
 	"reflect"
+	"github.com/davyxu/cellnet/codec/sproto"
 )
 
 type MyCar int32
@@ -70,4 +71,8 @@ var SProtoStructs = []reflect.Type{
 	reflect.TypeOf((*MyData)(nil)).Elem(),
 
 	reflect.TypeOf((*MyProfile)(nil)).Elem(),
+}
+
+func init() {
+	sprotocodec.AutoRegisterMessageMeta(example.SProtoStructs)
 }

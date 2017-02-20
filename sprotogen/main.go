@@ -11,6 +11,7 @@ import (
 var paramOut = flag.String("out", "", "output filename")
 var paramPackage = flag.String("package", "", "package name in go files")
 var paramType = flag.String("type", "", "output file type")
+var paramCellnetReg = flag.Bool("cellnet_reg", false, "for type go, generate sproto auto register entry for github.com/davyxu/cellnet")
 
 func mergeSchema(filelist []string) *meta.FileDescriptor {
 
@@ -37,7 +38,7 @@ func main() {
 
 	switch *paramType {
 	case "go":
-		gen_go(fileD, *paramPackage, *paramOut)
+		gen_go(fileD, *paramPackage, *paramOut, *paramCellnetReg)
 	case "sproto":
 		gen_sproto(fileD, *paramOut)
 	case "cs":

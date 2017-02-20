@@ -19,6 +19,10 @@ func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
 
 	var lastFpt fieldParseType
 
+	if p.TokenID() == Token_CurlyBraceR {
+		lastFpt = fieldParseType_StructField
+	}
+
 	for p.TokenID() != Token_CurlyBraceR {
 
 		// 字段

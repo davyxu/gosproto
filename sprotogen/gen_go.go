@@ -16,6 +16,7 @@ package {{.PackageName}}
 
 import (
 	"reflect"
+	{{if .CellnetReg}}"github.com/davyxu/cellnet/codec/sproto"{{end}}
 )
 
 {{range $a, $enumobj := .Enums}}
@@ -40,6 +41,12 @@ var SProtoStructs = []reflect.Type{
 	reflect.TypeOf((*{{.Name}})(nil)).Elem(),
 {{end}}
 }
+
+{{if .CellnetReg}}
+func init() {
+	sprotocodec.AutoRegisterMessageMeta(SProtoStructs)
+}
+{{end}}
 
 `
 
@@ -138,6 +145,8 @@ type goFileModel struct {
 	Enums []*goStructModel
 
 	PackageName string
+
+	CellnetReg bool
 }
 
 func addGoStruct(descs []*meta.Descriptor, callback func(*goStructModel)) {
@@ -163,11 +172,12 @@ func addGoStruct(descs []*meta.Descriptor, callback func(*goStructModel)) {
 	}
 }
 
-func gen_go(fileD *meta.FileDescriptor, packageName, filename string) {
+func gen_go(fileD *meta.FileDescriptor, packageName, filename string, cellnetReg bool) {
 
 	fm := &goFileModel{
 		FileDescriptor: fileD,
 		PackageName:    packageName,
+		CellnetReg:     cellnetReg,
 	}
 
 	addGoStruct(fileD.Structs, func(stModel *goStructModel) {

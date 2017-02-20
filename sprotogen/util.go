@@ -53,6 +53,7 @@ func generateCode(templateName, templateStr, output string, model interface{}, o
 			goto OnError
 		}
 	}
+	return
 
 OnError:
 	fmt.Println(err)
