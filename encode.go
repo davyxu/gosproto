@@ -58,7 +58,7 @@ func headerEncodeBool(sf *SprotoField, v reflect.Value) (uint16, bool) {
 	}
 
 	var n uint16 = 0
-	if v.Elem().Bool() {
+	if v.Bool() {
 		n = 1
 	}
 	return 2 * (n + 1), false

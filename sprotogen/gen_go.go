@@ -38,8 +38,7 @@ type {{.Name}} struct{
 
 var SProtoStructs = []reflect.Type{
 {{range .Structs}}
-	reflect.TypeOf((*{{.Name}})(nil)).Elem(),
-{{end}}
+	reflect.TypeOf((*{{.Name}})(nil)).Elem(), // {{.MsgID}} {{end}}
 }
 
 {{if .CellnetReg}}
@@ -135,6 +134,16 @@ type goStructModel struct {
 	*meta.Descriptor
 
 	GoFields []goFieldModel
+
+	f *goFileModel
+}
+
+func (self *goStructModel) MsgID() uint32 {
+	return StringHash(self.MsgFullName())
+}
+
+func (self *goStructModel) MsgFullName() string {
+	return self.f.PackageName + "." + self.Name
 }
 
 type goFileModel struct {
@@ -181,6 +190,7 @@ func gen_go(fileD *meta.FileDescriptor, packageName, filename string, cellnetReg
 	}
 
 	addGoStruct(fileD.Structs, func(stModel *goStructModel) {
+		stModel.f = fm
 		fm.Structs = append(fm.Structs, stModel)
 	})
 
