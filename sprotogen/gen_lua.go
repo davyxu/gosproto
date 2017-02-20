@@ -16,10 +16,8 @@ local {{$enumObj.Name}}_{{.Name}} = {{.Tag}} {{end}}
 local sproto = {
 	Schema = [[
 {{range .Structs}}
-.{{.Name}} {
-	{{range .LuaFields}}	
-	{{.Name}} {{.Tag}} : {{.TypeName}}
-	{{end}}
+.{{.Name}} {	{{range .LuaFields}}	
+	{{.Name}} {{.Tag}} : {{.CompatibleTypeName}} {{end}}
 }
 {{end}}
 	]],
@@ -42,18 +40,6 @@ return sproto
 
 type luaFieldModel struct {
 	*meta.FieldDescriptor
-}
-
-func (self *luaFieldModel) TypeName() string {
-
-	// 字段类型映射go的类型
-	switch self.Type {
-	case meta.FieldType_Enum:
-		return "integer"
-	default:
-		return self.CompatibleTypeString()
-	}
-
 }
 
 type luaStructModel struct {

@@ -16,16 +16,28 @@ package {{.PackageName}}
 
 import (
 	"reflect"
+	"github.com/davyxu/gosproto"
+	"github.com/davyxu/goobjfmt"
 	{{if .CellnetReg}}"github.com/davyxu/cellnet/codec/sproto"{{end}}
 )
 
 {{range $a, $enumobj := .Enums}}
 type {{.Name}} int32
-const (
-	{{range .GoFields}}
-	{{$enumobj.Name}}_{{.Name}} {{$enumobj.Name}} = {{.Tag}}
-	{{end}}
+const (	{{range .GoFields}}
+	{{$enumobj.Name}}_{{.Name}} {{$enumobj.Name}} = {{.Tag}} {{end}}
 )
+
+var {{$enumobj.Name}}_ValueByName = map[string]int32{ {{range .GoFields}}
+	"{{.Name}}": {{.Tag}}, {{end}}
+}
+
+var {{$enumobj.Name}}_NameByValue = map[int32]string{ {{range .GoFields}}
+	{{.Tag}}: "{{.Name}}" , {{end}}
+}
+
+func (self {{$enumobj.Name}}) String() string {
+	return sproto.EnumName({{$enumobj.Name}}_NameByValue, int32(self))
+}
 {{end}}
 
 {{range .Structs}}
@@ -34,6 +46,9 @@ type {{.Name}} struct{
 		{{.FieldName}} {{.GoTypeName}} {{.GoTags}} 
 	{{end}}
 }
+
+func (self *{{.Name}}) String() string { return goobjfmt.CompactTextString(self) }
+
 {{end}}
 
 var SProtoStructs = []reflect.Type{

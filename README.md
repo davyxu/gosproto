@@ -174,5 +174,13 @@ ok  	github.com/xjdrew/gosproto	7.024s
 ```
 
 
+# Feedback
 
+Star me if you like or use, thanks
+
+blog(Chinese): [http://www.cppblog.com/sunicdavy](http://www.cppblog.com/sunicdavy)
+
+zhihu(Chinese): [http://www.zhihu.com/people/sunicdavy](http://www.zhihu.com/people/sunicdavy)
+
+issure: [https://github.com/davyxu/tabtoy/issues](https://github.com/davyxu/tabtoy/issues)
 

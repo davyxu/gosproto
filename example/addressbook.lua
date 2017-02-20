@@ -14,56 +14,35 @@ local MyCar_Pig = 3
 local sproto = {
 	Schema = [[
 
-.PhoneNumber {
-		
-	number 0 : string
-		
-	type 1 : integer
-	
+.PhoneNumber {		
+	number 0 : string 	
+	type 1 : integer 
 }
 
-.Person {
-		
-	name 0 : string
-		
-	id 1 : integer
-		
-	email 2 : string
-		
-	phone 3 : *PhoneNumber
-	
+.Person {		
+	name 0 : string 	
+	id 1 : integer 	
+	email 2 : string 	
+	phone 3 : PhoneNumber 
 }
 
-.AddressBook {
-		
-	person 0 : *Person
-	
+.AddressBook {		
+	person 0 : Person 
 }
 
-.MyData {
-		
-	name 0 : string
-		
-	type 1 : integer
-		
-	int32 2 : integer
-		
-	uint32 4 : integer
-		
-	int64 5 : integer
-		
-	uint64 6 : integer
-	
+.MyData {		
+	name 0 : string 	
+	type 1 : integer 	
+	int32 2 : integer 	
+	uint32 4 : integer 	
+	int64 5 : integer 	
+	uint64 6 : integer 
 }
 
-.MyProfile {
-		
-	nameField 1 : MyData
-		
-	nameArray 2 : *MyData
-		
-	nameMap 3 : *MyData(type)
-	
+.MyProfile {		
+	nameField 1 : MyData 	
+	nameArray 2 : MyData 	
+	nameMap 3 : MyData 
 }
 
 	]],

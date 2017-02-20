@@ -5,6 +5,8 @@ package example
 
 import (
 	"reflect"
+	"github.com/davyxu/gosproto"
+	"github.com/davyxu/goobjfmt"
 	"github.com/davyxu/cellnet/codec/sproto"
 )
 
@@ -12,17 +14,33 @@ type MyCar int32
 
 const (
 	MyCar_Monkey MyCar = 1
-
-	MyCar_Monk MyCar = 2
-
-	MyCar_Pig MyCar = 3
+	MyCar_Monk   MyCar = 2
+	MyCar_Pig    MyCar = 3
 )
+
+var MyCar_ValueByName = map[string]int32{
+	"Monkey": 1,
+	"Monk":   2,
+	"Pig":    3,
+}
+
+var MyCar_NameByValue = map[int32]string{
+	1: "Monkey",
+	2: "Monk",
+	3: "Pig",
+}
+
+func (self MyCar) String() string {
+	return sproto.EnumName(MyCar_NameByValue, int32(self))
+}
 
 type PhoneNumber struct {
 	Number string `sproto:"string,0,name=Number"`
 
 	Type int32 `sproto:"integer,1,name=Type"`
 }
+
+func (self *PhoneNumber) String() string { return goobjfmt.CompactTextString(self) }
 
 type Person struct {
 	Name string `sproto:"string,0,name=Name"`
@@ -34,9 +52,13 @@ type Person struct {
 	Phone []*PhoneNumber `sproto:"struct,3,array,name=Phone"`
 }
 
+func (self *Person) String() string { return goobjfmt.CompactTextString(self) }
+
 type AddressBook struct {
 	Person []*Person `sproto:"struct,0,array,name=Person"`
 }
+
+func (self *AddressBook) String() string { return goobjfmt.CompactTextString(self) }
 
 type MyData struct {
 	Name string `sproto:"string,0,name=Name"`
@@ -52,6 +74,8 @@ type MyData struct {
 	Uint64 uint64 `sproto:"integer,6,name=Uint64"`
 }
 
+func (self *MyData) String() string { return goobjfmt.CompactTextString(self) }
+
 type MyProfile struct {
 	NameField *MyData `sproto:"struct,1,name=NameField"`
 
@@ -59,6 +83,8 @@ type MyProfile struct {
 
 	NameMap []*MyData `sproto:"struct,3,array,name=NameMap"`
 }
+
+func (self *MyProfile) String() string { return goobjfmt.CompactTextString(self) }
 
 var SProtoStructs = []reflect.Type{
 

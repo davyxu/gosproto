@@ -59,7 +59,8 @@ func (self *FieldDescriptor) CompatibleTypeName() string {
 	case FieldType_Int32,
 		FieldType_Int64,
 		FieldType_UInt32,
-		FieldType_UInt64:
+		FieldType_UInt64,
+		FieldType_Enum:
 		return FieldType_Integer.String()
 	default:
 		return self.Type.String()

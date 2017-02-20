@@ -44,11 +44,15 @@ func TestMyProfile(t *testing.T) {
 
 	encodeDecodeCompare(t, input, &my)
 
+	t.Log(input.Type.String())
+
 	assert(t, input.Name == "genji")
 	assert(t, input.Type == MyCar_Pig)
 	assert(t, input.Uint32 == math.MaxUint32)
 	assert(t, input.Int64 == math.MaxInt64)
 	assert(t, input.Uint64 == math.MaxUint64)
+
+	t.Log(input.String())
 }
 
 func assert(t *testing.T, condition bool) {
