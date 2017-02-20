@@ -62,17 +62,13 @@ type MyProfile struct {
 
 var SProtoStructs = []reflect.Type{
 
-	reflect.TypeOf((*PhoneNumber)(nil)).Elem(),
-
-	reflect.TypeOf((*Person)(nil)).Elem(),
-
-	reflect.TypeOf((*AddressBook)(nil)).Elem(),
-
-	reflect.TypeOf((*MyData)(nil)).Elem(),
-
-	reflect.TypeOf((*MyProfile)(nil)).Elem(),
+	reflect.TypeOf((*PhoneNumber)(nil)).Elem(), // 4271979557
+	reflect.TypeOf((*Person)(nil)).Elem(),      // 1498745430
+	reflect.TypeOf((*AddressBook)(nil)).Elem(), // 2618161298
+	reflect.TypeOf((*MyData)(nil)).Elem(),      // 2244887298
+	reflect.TypeOf((*MyProfile)(nil)).Elem(),   // 438153711
 }
 
 func init() {
-	sprotocodec.AutoRegisterMessageMeta(example.SProtoStructs)
+	sprotocodec.AutoRegisterMessageMeta(SProtoStructs)
 }

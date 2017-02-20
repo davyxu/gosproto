@@ -44,7 +44,7 @@ local sproto = {
 		
 	name 0 : string
 		
-	type 1 : enum
+	type 1 : integer
 		
 	int32 2 : integer
 		

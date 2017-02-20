@@ -17,8 +17,8 @@ local sproto = {
 	Schema = [[
 {{range .Structs}}
 .{{.Name}} {
-	{{range .Fields}}	
-	{{.Name}} {{.Tag}} : {{.CompatibleTypeString}}
+	{{range .LuaFields}}	
+	{{.Name}} {{.Tag}} : {{.TypeName}}
 	{{end}}
 }
 {{end}}
@@ -40,10 +40,28 @@ return sproto
 
 `
 
+type luaFieldModel struct {
+	*meta.FieldDescriptor
+}
+
+func (self *luaFieldModel) TypeName() string {
+
+	// 字段类型映射go的类型
+	switch self.Type {
+	case meta.FieldType_Enum:
+		return "integer"
+	default:
+		return self.CompatibleTypeString()
+	}
+
+}
+
 type luaStructModel struct {
 	*meta.Descriptor
 
 	f *luaFileModel
+
+	LuaFields []luaFieldModel
 }
 
 func (self *luaStructModel) MsgID() uint32 {
@@ -66,6 +84,16 @@ func addLuaStruct(descs []*meta.Descriptor, callback func(*luaStructModel)) {
 
 		stModel := &luaStructModel{
 			Descriptor: st,
+		}
+
+		for _, fd := range st.Fields {
+
+			fdModel := luaFieldModel{
+				FieldDescriptor: fd,
+			}
+
+			stModel.LuaFields = append(stModel.LuaFields, fdModel)
+
 		}
 
 		callback(stModel)
