@@ -17,7 +17,7 @@ local sproto = {
 	Schema = [[
 {{range .Structs}}
 .{{.Name}} {	{{range .LuaFields}}	
-	{{.Name}} {{.Tag}} : {{.CompatibleTypeName}} {{end}}
+	{{.Name}} {{.Tag}} : {{.CompatibleTypeString}} {{end}}
 }
 {{end}}
 	]],
