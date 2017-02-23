@@ -3,72 +3,9 @@ package meta
 import (
 	"errors"
 	"fmt"
-
-	"github.com/davyxu/golexer"
 )
 
-type parsingField struct {
-	typeName      string
-	mainIndexName string
-
-	fd *FieldDescriptor
-
-	d *Descriptor
-
-	tp golexer.TokenPos
-
-	miss bool
-}
-
-func newParsingField(typeName string, fd *FieldDescriptor, d *Descriptor, tp golexer.TokenPos) *parsingField {
-	return &parsingField{typeName: typeName,
-		fd: fd,
-		d:  d,
-		tp: tp}
-}
-
-func (self *parsingField) resolve(pass int) (bool, error) {
-
-	self.fd.Type, self.fd.Complex = self.fd.parseType(self.typeName)
-
-	if self.fd.Type == FieldType_None {
-		if pass > 1 {
-
-			fmt.Println(self.tp.String())
-
-			return true, errors.New("type not found: " + self.typeName)
-		} else {
-
-			self.miss = true
-			return true, nil
-		}
-	}
-
-	if self.mainIndexName != "" {
-		if indexFd, ok := self.fd.Complex.FieldByName[self.mainIndexName]; ok {
-			self.fd.MainIndex = indexFd
-		} else {
-			if pass > 1 {
-				return true, errors.New("Main index not found:" + self.typeName)
-			} else {
-				return true, nil
-			}
-
-		}
-	}
-
-	return false, nil
-}
-
-type fieldParseType int
-
-const (
-	fieldParseType_None fieldParseType = iota
-	fieldParseType_StructField
-	fieldParseType_EnumField
-)
-
-func parseField(p *sprotoParser, d *Descriptor) (fpt fieldParseType) {
+func parseField(p *sprotoParser, d *Descriptor) {
 
 	fd := newFieldDescriptor(d)
 
@@ -83,59 +20,48 @@ func parseField(p *sprotoParser, d *Descriptor) (fpt fieldParseType) {
 	fd.Tag = p.Expect(Token_Numeral).ToInt()
 
 	// :
-	if p.TokenID() == Token_Colon {
+	p.Expect(Token_Colon)
 
+	tp := p.TokenPos()
+
+	var typeName string
+
+	switch p.TokenID() {
+	// 数组
+	case Token_Star:
 		p.NextToken()
 
-		tp := p.TokenPos()
+		fd.Repeatd = true
 
-		var typeName string
+		typeName = p.Expect(Token_Identifier).Value()
 
-		switch p.TokenID() {
-		// 数组
-		case Token_Star:
-			p.NextToken()
+	case Token_Identifier:
+		// 普通字段
+		typeName = p.TokenValue()
+		p.NextToken()
+		break
+	default:
+	}
 
-			fd.Repeatd = true
+	// 根据类型名查找类型及结构体类型
 
-			typeName = p.Expect(Token_Identifier).Value()
+	pf := newLazyField(typeName, fd, d, tp)
 
-		case Token_Identifier:
-			// 普通字段
-			typeName = p.TokenValue()
-			p.NextToken()
-			break
-		default:
-		}
+	// map的索引解析 (
+	if p.TokenID() == Token_ParenL {
+		p.NextToken()
 
-		// 根据类型名查找类型及结构体类型
+		// 索引的字段
+		pf.mainIndexName = p.Expect(Token_Identifier).Value()
 
-		pf := newParsingField(typeName, fd, d, tp)
+		p.Expect(Token_ParenR)
 
-		// map的索引解析 (
-		if p.TokenID() == Token_ParenL {
-			p.NextToken()
+	}
+	// )
 
-			// 索引的字段
-			pf.mainIndexName = p.Expect(Token_Identifier).Value()
-
-			p.Expect(Token_ParenR)
-
-		}
-		// )
-
-		// 尝试首次解析
-		if need2Pass, _ := pf.resolve(1); need2Pass {
-			d.File.unknownFields = append(d.File.unknownFields, pf)
-		}
-
-		fpt = fieldParseType_StructField
-	} else {
-
-		fd.Type = FieldType_Int32
-
-		fpt = fieldParseType_EnumField
-
+	// 尝试首次解析
+	if need2Pass, _ := pf.resolve(1); need2Pass {
+		d.File.unknownFields = append(d.File.unknownFields, pf)
 	}
 
 	checkField(d, fd)

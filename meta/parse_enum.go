@@ -4,10 +4,10 @@ import (
 	"errors"
 )
 
-func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
+func parseEnum(p *sprotoParser, fileD *FileDescriptor) {
 
-	// .
-	p.Expect(Token_Dot)
+	// enum
+	p.Expect(Token_Enum)
 
 	d := newDescriptor(fileD)
 
@@ -20,7 +20,7 @@ func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
 	for p.TokenID() != Token_CurlyBraceR {
 
 		// 字段
-		parseField(p, d)
+		parseEnumField(p, d)
 
 	}
 
@@ -32,6 +32,6 @@ func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
 		panic(errors.New("Duplicate name: " + d.Name))
 	}
 
-	fileD.addStruct(d)
+	fileD.addEnum(d)
 
 }

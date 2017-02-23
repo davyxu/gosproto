@@ -19,6 +19,8 @@ const (
 	Token_CurlyBraceR // }
 	Token_Star        // *
 	Token_Dot         // .
+	Token_Enum        // Enum
+	Token_Assign      // =
 )
 
 type sprotoParser struct {
@@ -44,7 +46,9 @@ func newSProtoParser(srcName string) *sprotoParser {
 	l.AddMatcher(golexer.NewSignMatcher(Token_ParenR, ")"))
 	l.AddMatcher(golexer.NewSignMatcher(Token_Star, "*"))
 	l.AddMatcher(golexer.NewSignMatcher(Token_Dot, "."))
+	l.AddMatcher(golexer.NewSignMatcher(Token_Assign, "="))
 	l.AddMatcher(golexer.NewSignMatcher(Token_Colon, ":"))
+	l.AddMatcher(golexer.NewKeywordMatcher(Token_Enum, "enum"))
 
 	l.AddMatcher(golexer.NewIdentifierMatcher(Token_Identifier))
 

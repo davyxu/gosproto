@@ -11,7 +11,7 @@ type FileDescriptor struct {
 
 	EnumByName map[string]*Descriptor
 
-	unknownFields []*parsingField
+	unknownFields []*lazyField
 }
 
 func (self *FileDescriptor) resolveAll() error {
