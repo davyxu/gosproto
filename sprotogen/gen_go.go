@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"go/token"
-	"strings"
 
 	"github.com/davyxu/gosproto/meta"
 )
@@ -23,16 +22,16 @@ import (
 
 {{range $a, $enumobj := .Enums}}
 type {{.Name}} int32
-const (	{{range .GoFields}}
-	{{$enumobj.Name}}_{{.Name}} {{$enumobj.Name}} = {{.Tag}} {{end}}
+const (	{{range .StFields}}
+	{{$enumobj.Name}}_{{.Name}} {{$enumobj.Name}} = {{.TagNumber}} {{end}}
 )
 
-var {{$enumobj.Name}}_ValueByName = map[string]int32{ {{range .GoFields}}
-	"{{.Name}}": {{.Tag}}, {{end}}
+var {{$enumobj.Name}}_ValueByName = map[string]int32{ {{range .StFields}}
+	"{{.Name}}": {{.TagNumber}}, {{end}}
 }
 
-var {{$enumobj.Name}}_NameByValue = map[int32]string{ {{range .GoFields}}
-	{{.Tag}}: "{{.Name}}" , {{end}}
+var {{$enumobj.Name}}_NameByValue = map[int32]string{ {{range .StFields}}
+	{{.TagNumber}}: "{{.Name}}" , {{end}}
 }
 
 func (self {{$enumobj.Name}}) String() string {
@@ -42,8 +41,8 @@ func (self {{$enumobj.Name}}) String() string {
 
 {{range .Structs}}
 type {{.Name}} struct{
-	{{range .GoFields}}
-		{{.FieldName}} {{.GoTypeName}} {{.GoTags}} 
+	{{range .StFields}}
+		{{.GoFieldName}} {{.GoTypeName}} {{.GoTags}} 
 	{{end}}
 }
 
@@ -64,16 +63,7 @@ func init() {
 
 `
 
-// 字段首字母大写
-func publicFieldName(name string) string {
-	return strings.ToUpper(string(name[0])) + name[1:]
-}
-
-type goFieldModel struct {
-	*meta.FieldDescriptor
-}
-
-func (self *goFieldModel) FieldName() string {
+func (self *fieldModel) GoFieldName() string {
 	pname := publicFieldName(self.Name)
 
 	// 碰到关键字在尾部加_
@@ -84,7 +74,7 @@ func (self *goFieldModel) FieldName() string {
 	return pname
 }
 
-func (self *goFieldModel) GoTypeName() string {
+func (self *fieldModel) GoTypeName() string {
 
 	var b bytes.Buffer
 	if self.Repeatd {
@@ -111,7 +101,7 @@ func (self *goFieldModel) GoTypeName() string {
 	return b.String()
 }
 
-func (self *goFieldModel) GoTags() string {
+func (self *fieldModel) GoTags() string {
 
 	var b bytes.Buffer
 
@@ -131,87 +121,29 @@ func (self *goFieldModel) GoTags() string {
 
 	b.WriteString(",")
 
-	b.WriteString(fmt.Sprintf("%d", self.Tag))
+	b.WriteString(fmt.Sprintf("%d", self.TagNumber()))
 	b.WriteString(",")
 
 	if self.Repeatd {
 		b.WriteString("array,")
 	}
 
-	b.WriteString(fmt.Sprintf("name=%s", self.FieldName()))
+	b.WriteString(fmt.Sprintf("name=%s", self.GoFieldName()))
 
 	b.WriteString("\"`")
 
 	return b.String()
 }
 
-type goStructModel struct {
-	*meta.Descriptor
-
-	GoFields []goFieldModel
-
-	f *goFileModel
-}
-
-func (self *goStructModel) MsgID() uint32 {
-	return StringHash(self.MsgFullName())
-}
-
-func (self *goStructModel) MsgFullName() string {
-	return self.f.PackageName + "." + self.Name
-}
-
-type goFileModel struct {
-	*meta.FileDescriptor
-
-	Structs []*goStructModel
-
-	Enums []*goStructModel
-
-	PackageName string
-
-	CellnetReg bool
-}
-
-func addGoStruct(descs []*meta.Descriptor, callback func(*goStructModel)) {
-
-	for _, st := range descs {
-
-		stModel := &goStructModel{
-			Descriptor: st,
-		}
-
-		for _, fd := range st.Fields {
-
-			fdModel := goFieldModel{
-				FieldDescriptor: fd,
-			}
-
-			stModel.GoFields = append(stModel.GoFields, fdModel)
-
-		}
-
-		callback(stModel)
-
-	}
-}
-
 func gen_go(fileD *meta.FileDescriptor, packageName, filename string, cellnetReg bool) {
 
-	fm := &goFileModel{
+	fm := &fileModel{
 		FileDescriptor: fileD,
 		PackageName:    packageName,
 		CellnetReg:     cellnetReg,
 	}
 
-	addGoStruct(fileD.Structs, func(stModel *goStructModel) {
-		stModel.f = fm
-		fm.Structs = append(fm.Structs, stModel)
-	})
-
-	addGoStruct(fileD.Enums, func(stModel *goStructModel) {
-		fm.Enums = append(fm.Enums, stModel)
-	})
+	addData(fm, fileD)
 
 	generateCode("sp->go", goCodeTemplate, filename, fm, &generateOption{
 		formatGoCode: true,

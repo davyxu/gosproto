@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"go/token"
 	"sort"
 
 	"github.com/davyxu/gosproto/meta"
@@ -19,8 +18,8 @@ namespace {{.PackageName}}
 {
 {{range $a, $enumobj := .Enums}}
 	public enum {{.Name}} {
-		{{range .CSFields}}
-		{{.Name}} = {{.Tag}},
+		{{range .StFields}}
+		{{.Name}} = {{.TagNumber}},
 		{{end}}
 	}
 {{end}}
@@ -29,13 +28,13 @@ namespace {{.PackageName}}
 	public class {{.Name}} : SprotoTypeBase {
 		private static int max_field_count = {{.MaxFieldCount}};
 		
-		{{range .CSFields}}
-		private {{.CSTypeString}} _{{.Name}}; // tag {{.Tag}}
+		{{range .StFields}}
+		private {{.CSTypeString}} _{{.Name}}; // tag {{.TagNumber}}
 		public {{.CSTypeString}} {{.Name}} {
 			get{ return _{{.Name}}; }
 			set{ base.has_field.set_field({{.FieldIndex}},true); _{{.Name}} = value; }
 		}
-		public bool Has{{.UpperFirstName}}{
+		public bool Has{{.UpperName}}{
 			get { return base.has_field.has_field({{.FieldIndex}}); }
 		}
 		{{end}}
@@ -50,9 +49,9 @@ namespace {{.PackageName}}
 			int tag = -1;
 			while (-1 != (tag = base.deserialize.read_tag ())) {
 				switch (tag) {
-				{{range .CSFields}}
-				case {{.Tag}}:
-					this.{{.Name}} = base.deserialize.{{.ReadFunc}}{{.CSTemplate}}({{.LamdaFunc}});
+				{{range .StFields}}
+				case {{.TagNumber}}:
+					this.{{.Name}} = base.deserialize.{{.CSReadFunc}}{{.CSTemplate}}({{.CSLamdaFunc}});
 					break;
 				{{end}}
 				default:
@@ -65,9 +64,9 @@ namespace {{.PackageName}}
 		public override int encode (SprotoStream stream) {
 			base.serialize.open (stream);
 
-			{{range .CSFields}}
+			{{range .StFields}}
 			if (base.has_field.has_field ({{.FieldIndex}})) {
-				base.serialize.{{.WriteFunc}}(this.{{.Name}}, {{.Tag}});
+				base.serialize.{{.CSWriteFunc}}(this.{{.Name}}, {{.TagNumber}});
 			}
 			{{end}}
 
@@ -79,27 +78,7 @@ namespace {{.PackageName}}
 }
 `
 
-type csharpFieldModel struct {
-	*meta.FieldDescriptor
-	FieldIndex int
-}
-
-func (self *csharpFieldModel) UpperFirstName() string {
-	return publicFieldName(self.Name)
-}
-
-func (self *csharpFieldModel) FieldName() string {
-	pname := publicFieldName(self.Name)
-
-	// 碰到关键字在尾部加_
-	if token.Lookup(pname).IsKeyword() {
-		return pname + "_"
-	}
-
-	return pname
-}
-
-func (self *csharpFieldModel) CSTemplate() string {
+func (self *fieldModel) CSTemplate() string {
 
 	var buf bytes.Buffer
 
@@ -128,7 +107,7 @@ func (self *csharpFieldModel) CSTemplate() string {
 	return buf.String()
 }
 
-func (self *csharpFieldModel) LamdaFunc() string {
+func (self *fieldModel) CSLamdaFunc() string {
 	if self.MainIndex == nil {
 		return ""
 	}
@@ -136,12 +115,12 @@ func (self *csharpFieldModel) LamdaFunc() string {
 	return fmt.Sprintf("v => v.%s", self.MainIndex.Name)
 }
 
-func (self *csharpFieldModel) WriteFunc() string {
+func (self *fieldModel) CSWriteFunc() string {
 
 	return "write_" + self.serializer()
 }
 
-func (self *csharpFieldModel) ReadFunc() string {
+func (self *fieldModel) CSReadFunc() string {
 
 	funcName := "read_"
 
@@ -158,7 +137,7 @@ func (self *csharpFieldModel) ReadFunc() string {
 	return funcName + self.serializer()
 }
 
-func (self *csharpFieldModel) serializer() string {
+func (self *fieldModel) serializer() string {
 
 	var baseName string
 
@@ -188,7 +167,7 @@ func (self *csharpFieldModel) serializer() string {
 	return baseName
 }
 
-func (self *csharpFieldModel) CSTypeName() string {
+func (self *fieldModel) CSTypeName() string {
 	// 字段类型映射go的类型
 	return csharpTypeName(self.FieldDescriptor)
 }
@@ -216,7 +195,7 @@ func csharpTypeName(fd *meta.FieldDescriptor) string {
 	return "unknown"
 }
 
-func (self *csharpFieldModel) CSTypeString() string {
+func (self *fieldModel) CSTypeString() string {
 
 	var b bytes.Buffer
 	if self.Repeatd {
@@ -243,79 +222,14 @@ func (self *csharpFieldModel) CSTypeString() string {
 	return b.String()
 }
 
-type csharpStructModel struct {
-	*meta.Descriptor
-
-	CSFields []csharpFieldModel
-}
-
-func (self *csharpStructModel) FieldCount() int {
-	return len(self.CSFields)
-}
-
-type csharpFileModel struct {
-	*meta.FileDescriptor
-
-	Structs []*csharpStructModel
-	Enums   []*csharpStructModel
-
-	PackageName string
-}
-
-func (self *csharpFileModel) Len() int {
-	return len(self.Structs)
-}
-
-func (self *csharpFileModel) Swap(i, j int) {
-	self.Structs[i], self.Structs[j] = self.Structs[j], self.Structs[i]
-}
-
-func (self *csharpFileModel) Less(i, j int) bool {
-
-	a := self.Structs[i]
-	b := self.Structs[j]
-
-	return a.Name < b.Name
-}
-
-func addCSStruct(descs []*meta.Descriptor, callback func(*csharpStructModel)) {
-
-	for _, st := range descs {
-
-		stModel := &csharpStructModel{
-			Descriptor: st,
-		}
-
-		for index, fd := range st.Fields {
-
-			fdModel := csharpFieldModel{
-				FieldDescriptor: fd,
-				FieldIndex:      index,
-			}
-
-			stModel.CSFields = append(stModel.CSFields, fdModel)
-
-		}
-
-		callback(stModel)
-
-	}
-}
-
 func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
 
-	fm := &csharpFileModel{
+	fm := &fileModel{
 		FileDescriptor: fileD,
 		PackageName:    packageName,
 	}
 
-	addCSStruct(fileD.Structs, func(stModel *csharpStructModel) {
-		fm.Structs = append(fm.Structs, stModel)
-	})
-
-	addCSStruct(fileD.Enums, func(stModel *csharpStructModel) {
-		fm.Enums = append(fm.Enums, stModel)
-	})
+	addData(fm, fileD)
 
 	sort.Sort(fm)
 

@@ -5,9 +5,19 @@ import (
 	"errors"
 )
 
+type DescriptorType int
+
+const (
+	DescriptorType_None DescriptorType = iota
+	DescriptorType_Enum
+	DescriptorType_Struct
+)
+
 type Descriptor struct {
 	*CommentGroup
-	Name string
+	Name    string
+	SrcName string
+	Type    DescriptorType
 
 	Fields      []*FieldDescriptor
 	FieldByName map[string]*FieldDescriptor
@@ -16,21 +26,44 @@ type Descriptor struct {
 	File *FileDescriptor
 }
 
+func (self *Descriptor) MaxTag() (ret int) {
+
+	for _, fd := range self.Fields {
+		if fd.Tag > ret {
+			ret = fd.Tag
+		}
+
+	}
+
+	return
+}
+
+func (self *Descriptor) TypeName() string {
+	switch self.Type {
+	case DescriptorType_Enum:
+		return "enum"
+	case DescriptorType_Struct:
+		return "struct"
+	}
+
+	return "none"
+}
+
 // c# 要使用的fieldcount
 func (self *Descriptor) MaxFieldCount() int {
 	maxn := len(self.Fields)
 	lastTag := -1
 
 	for _, fd := range self.Fields {
-		if fd.Tag < lastTag {
+		if fd.TagNumber() < lastTag {
 			panic(errors.New("tag must in ascending order"))
 		}
 
-		if fd.Tag > lastTag+1 {
+		if fd.TagNumber() > lastTag+1 {
 			maxn++
 		}
 
-		lastTag = fd.Tag
+		lastTag = fd.TagNumber()
 	}
 
 	return maxn

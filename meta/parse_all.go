@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 
 	"errors"
+
 	"github.com/davyxu/golexer"
 )
 
@@ -73,10 +74,10 @@ func rawParse(fileD *FileDescriptor, data string, srcName string) (retErr error)
 	for p.TokenID() != Token_EOF {
 
 		switch p.TokenID() {
-		case Token_Dot:
-			parseStruct(p, fileD)
+		case Token_Dot, Token_Message:
+			parseStruct(p, fileD, srcName)
 		case Token_Enum:
-			parseEnum(p, fileD)
+			parseEnum(p, fileD, srcName)
 		default:
 			panic(errors.New("Expect '.' or 'enum'"))
 		}

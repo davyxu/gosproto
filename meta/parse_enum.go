@@ -4,15 +4,18 @@ import (
 	"errors"
 )
 
-func parseEnum(p *sprotoParser, fileD *FileDescriptor) {
+func parseEnum(p *sprotoParser, fileD *FileDescriptor, srcName string) {
 
 	// enum
-	p.Expect(Token_Enum)
+	enumToken := p.Expect(Token_Enum)
 
 	d := newDescriptor(fileD)
+	d.Type = DescriptorType_Enum
 
 	// 名字
 	d.Name = p.Expect(Token_Identifier).Value()
+
+	d.CommentGroup = p.CommentGroupByLine(enumToken.Line())
 
 	// {
 	p.Expect(Token_CurlyBraceL)
@@ -32,6 +35,6 @@ func parseEnum(p *sprotoParser, fileD *FileDescriptor) {
 		panic(errors.New("Duplicate name: " + d.Name))
 	}
 
-	fileD.addEnum(d)
+	fileD.addObject(d, srcName)
 
 }

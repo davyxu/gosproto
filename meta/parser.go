@@ -25,6 +25,7 @@ const (
 	Token_Star        // *
 	Token_Dot         // .
 	Token_Enum        // Enum
+	Token_Message     // Message
 	Token_Assign      // =
 )
 
@@ -73,21 +74,29 @@ func (self *sprotoParser) CommentGroupByLine(line int) *CommentGroup {
 
 	var buff bytes.Buffer
 
+	start := line - 1
+	var end int
+
 	for i := line - 1; i >= 1; i-- {
 
-		if comment, ok := self.commentsByLine[i]; ok {
-
-			if buff.Len() > 0 {
-				buff.WriteString("\n")
-			}
-
-			cg.addLineComment(comment)
-
-			buff.WriteString(comment)
-		} else {
+		if _, ok := self.commentsByLine[i]; !ok {
+			end = i
 			break
 		}
 
+	}
+
+	for i := end; i <= start; i++ {
+
+		comment, _ := self.commentsByLine[i]
+
+		if buff.Len() > 0 {
+			buff.WriteString("\n")
+		}
+
+		cg.addLineComment(comment)
+
+		buff.WriteString(comment)
 	}
 
 	cg.Leading = buff.String()
@@ -117,6 +126,7 @@ func newSProtoParser(srcName string) *sprotoParser {
 	l.AddMatcher(golexer.NewSignMatcher(Token_Assign, "="))
 	l.AddMatcher(golexer.NewSignMatcher(Token_Colon, ":"))
 	l.AddMatcher(golexer.NewKeywordMatcher(Token_Enum, "enum"))
+	l.AddMatcher(golexer.NewKeywordMatcher(Token_Message, "message"))
 
 	l.AddMatcher(golexer.NewIdentifierMatcher(Token_Identifier))
 

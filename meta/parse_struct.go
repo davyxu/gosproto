@@ -4,12 +4,14 @@ import (
 	"errors"
 )
 
-func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
+func parseStruct(p *sprotoParser, fileD *FileDescriptor, srcName string) {
 
-	// .
-	dotToken := p.Expect(Token_Dot)
+	dotToken := p.RawToken()
+
+	p.NextToken()
 
 	d := newDescriptor(fileD)
+	d.Type = DescriptorType_Struct
 
 	// 名字
 	d.Name = p.Expect(Token_Identifier).Value()
@@ -22,7 +24,7 @@ func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
 	for p.TokenID() != Token_CurlyBraceR {
 
 		// 字段
-		parseField(p, d)
+		parseStructField(p, d)
 
 	}
 
@@ -34,6 +36,6 @@ func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
 		panic(errors.New("Duplicate name: " + d.Name))
 	}
 
-	fileD.addStruct(d)
+	fileD.addObject(d, srcName)
 
 }

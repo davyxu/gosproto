@@ -7,11 +7,21 @@ type FieldDescriptor struct {
 	Name      string
 	Type      FieldType
 	Tag       int
+	AutoTag   int
 	Repeatd   bool
 	MainIndex *FieldDescriptor
 	Complex   *Descriptor
 
 	Struct *Descriptor
+}
+
+func (self *FieldDescriptor) TagNumber() int {
+
+	if self.AutoTag == -1 {
+		return self.Tag
+	}
+
+	return self.AutoTag
 }
 
 func (self *FieldDescriptor) TypeString() string {
@@ -43,7 +53,7 @@ func (self *FieldDescriptor) typeStr(compatible bool) (ret string) {
 
 func (self *FieldDescriptor) String() string {
 
-	return fmt.Sprintf("%s %d : %s", self.Name, self.Tag, self.TypeString())
+	return fmt.Sprintf("%s %d : %s", self.Name, self.TagNumber(), self.TypeString())
 }
 
 func (self *FieldDescriptor) Kind() string {
@@ -73,7 +83,7 @@ func (self *FieldDescriptor) TypeName() string {
 
 	switch self.Type {
 
-	case FieldType_Struct:
+	case FieldType_Struct, FieldType_Enum:
 		return self.Complex.Name
 	default:
 		return self.Type.String()
@@ -105,5 +115,6 @@ func newFieldDescriptor(d *Descriptor) *FieldDescriptor {
 	return &FieldDescriptor{
 		CommentGroup: newCommentGroup(),
 		Struct:       d,
+		AutoTag:      -1,
 	}
 }

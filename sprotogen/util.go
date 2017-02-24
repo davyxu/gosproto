@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"os"
+	"strings"
 	"text/template"
 )
 
@@ -15,6 +16,11 @@ type generateOption struct {
 	formatGoCode bool
 
 	outputData []byte
+}
+
+// 字段首字母大写
+func publicFieldName(name string) string {
+	return strings.ToUpper(string(name[0])) + name[1:]
 }
 
 func generateCode(templateName, templateStr, output string, model interface{}, opt *generateOption) {

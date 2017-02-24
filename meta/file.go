@@ -11,6 +11,9 @@ type FileDescriptor struct {
 
 	EnumByName map[string]*Descriptor
 
+	ObjectsBySrcName map[string]*Descriptor
+	Objects          []*Descriptor
+
 	unknownFields []*lazyField
 }
 
@@ -58,21 +61,30 @@ func (self *FileDescriptor) NameExists(name string) bool {
 	return false
 }
 
-func (self *FileDescriptor) addStruct(d *Descriptor) {
-	self.Structs = append(self.Structs, d)
-	self.StructByName[d.Name] = d
-}
+func (self *FileDescriptor) addObject(d *Descriptor, srcName string) {
 
-func (self *FileDescriptor) addEnum(d *Descriptor) {
-	self.Enums = append(self.Enums, d)
-	self.EnumByName[d.Name] = d
+	switch d.Type {
+	case DescriptorType_Enum:
+		self.Enums = append(self.Enums, d)
+		self.EnumByName[d.Name] = d
+	case DescriptorType_Struct:
+		self.Structs = append(self.Structs, d)
+		self.StructByName[d.Name] = d
+	}
+
+	d.SrcName = srcName
+
+	self.Objects = append(self.Objects, d)
+
+	self.ObjectsBySrcName[srcName] = d
 }
 
 func NewFileDescriptor() *FileDescriptor {
 
 	return &FileDescriptor{
-		StructByName: make(map[string]*Descriptor),
-		EnumByName:   make(map[string]*Descriptor),
+		StructByName:     make(map[string]*Descriptor),
+		EnumByName:       make(map[string]*Descriptor),
+		ObjectsBySrcName: make(map[string]*Descriptor),
 	}
 
 }

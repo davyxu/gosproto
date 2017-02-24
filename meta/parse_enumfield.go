@@ -6,6 +6,8 @@ func parseEnumField(p *sprotoParser, d *Descriptor) {
 
 	fd := newFieldDescriptor(d)
 
+	nameToken := p.RawToken()
+
 	// 字段名
 	fd.Name = p.Expect(Token_Identifier).Value()
 
@@ -20,6 +22,8 @@ func parseEnumField(p *sprotoParser, d *Descriptor) {
 	fd.Tag = p.Expect(Token_Numeral).ToInt()
 
 	fd.Type = FieldType_Int32
+
+	fd.CommentGroup = p.CommentGroupByLine(nameToken.Line())
 
 	checkField(d, fd)
 
