@@ -1,7 +1,8 @@
 
-
+# [agent] client -> battle # comment
 .PhoneNumber {
-	number 0 : string
+    # 头
+	number 0 : string # 哈哈
 	type 1 : int32
 }
 	

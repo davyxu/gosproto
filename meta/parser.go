@@ -1,89 +1,129 @@
 package meta
 
 import (
-	"fmt"
-	"io/ioutil"
-
+	"bytes"
 	"errors"
+
 	"github.com/davyxu/golexer"
 )
 
-func ParseFile(fileName string) (*FileDescriptor, error) {
-	fileD := NewFileDescriptor()
+// 自定义的token id
+const (
+	Token_EOF = iota
+	Token_Unknown
+	Token_LineEnd
+	Token_Numeral
+	Token_String
+	Token_WhiteSpace
+	Token_Identifier
+	Token_Comment
+	Token_Colon       // :
+	Token_ParenL      // (
+	Token_ParenR      // )
+	Token_CurlyBraceL // {
+	Token_CurlyBraceR // }
+	Token_Star        // *
+	Token_Dot         // .
+	Token_Enum        // Enum
+	Token_Assign      // =
+)
 
-	err := rawPaseFile(fileD, fileName)
-	if err != nil {
-		return nil, err
-	}
+type sprotoParser struct {
+	*golexer.Parser
 
-	return fileD, fileD.resolveAll()
+	commentsByLine map[int]string
 }
 
-func ParseFileList(fileD *FileDescriptor, filelist []string) (string, error) {
+func (self *sprotoParser) Expect(id int) golexer.Token {
 
-	for _, filename := range filelist {
-		if err := rawPaseFile(fileD, filename); err != nil {
-			return filename, err
-		}
+	if self.Parser.TokenID() != id {
+		panic(errors.New("Expect " + self.Lexer().MatcherString(id)))
 	}
 
-	return "", fileD.resolveAll()
+	t := self.RawToken()
 
+	self.NextToken()
+
+	return t
 }
 
-func ParseString(data string) (*FileDescriptor, error) {
+func (self *sprotoParser) NextToken() {
 
-	fileD := NewFileDescriptor()
+	for {
+		self.Parser.NextToken()
 
-	if err := rawParse(fileD, data, data); err != nil {
-		return nil, err
-	}
+		switch self.TokenID() {
 
-	return fileD, fileD.resolveAll()
-}
-
-// 从文件解析
-func rawPaseFile(fileD *FileDescriptor, fileName string) error {
-
-	data, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		return err
-	}
-
-	return rawParse(fileD, string(data), fileName)
-}
-
-// 解析字符串
-func rawParse(fileD *FileDescriptor, data string, srcName string) (retErr error) {
-
-	p := newSProtoParser(srcName)
-
-	defer golexer.ErrorCatcher(func(err error) {
-
-		fmt.Printf("%s %s\n", p.PreTokenPos().String(), err.Error())
-
-		retErr = err
-
-	})
-
-	p.Lexer().Start(data)
-
-	p.NextToken()
-
-	for p.TokenID() != Token_EOF {
-
-		switch p.TokenID() {
-		case Token_Dot:
-			parseStruct(p, fileD)
-		case Token_Enum:
-			parseEnum(p, fileD)
+		case Token_Comment:
+			self.commentsByLine[self.RawToken().Line()] = self.TokenValue()
 		default:
-			panic(errors.New("Expect '.' or 'enum'"))
+			return
 		}
+	}
 
-		p.NextToken()
+}
+
+func (self *sprotoParser) CommentGroupByLine(line int) *CommentGroup {
+
+	cg := newCommentGroup()
+
+	if comment, ok := self.commentsByLine[line]; ok {
+		cg.Trailing = comment
+	}
+
+	var buff bytes.Buffer
+
+	for i := line - 1; i >= 1; i-- {
+
+		if comment, ok := self.commentsByLine[i]; ok {
+
+			if buff.Len() > 0 {
+				buff.WriteString("\n")
+			}
+
+			cg.addLineComment(comment)
+
+			buff.WriteString(comment)
+		} else {
+			break
+		}
 
 	}
 
-	return nil
+	cg.Leading = buff.String()
+
+	return cg
+}
+
+func newSProtoParser(srcName string) *sprotoParser {
+
+	l := golexer.NewLexer()
+
+	// 匹配顺序从高到低
+
+	l.AddMatcher(golexer.NewNumeralMatcher(Token_Numeral))
+	l.AddMatcher(golexer.NewStringMatcher(Token_String))
+
+	l.AddIgnoreMatcher(golexer.NewWhiteSpaceMatcher(Token_WhiteSpace))
+	l.AddIgnoreMatcher(golexer.NewLineEndMatcher(Token_LineEnd))
+	l.AddMatcher(golexer.NewUnixStyleCommentMatcher(Token_Comment))
+
+	l.AddMatcher(golexer.NewSignMatcher(Token_CurlyBraceL, "{"))
+	l.AddMatcher(golexer.NewSignMatcher(Token_CurlyBraceR, "}"))
+	l.AddMatcher(golexer.NewSignMatcher(Token_ParenL, "("))
+	l.AddMatcher(golexer.NewSignMatcher(Token_ParenR, ")"))
+	l.AddMatcher(golexer.NewSignMatcher(Token_Star, "*"))
+	l.AddMatcher(golexer.NewSignMatcher(Token_Dot, "."))
+	l.AddMatcher(golexer.NewSignMatcher(Token_Assign, "="))
+	l.AddMatcher(golexer.NewSignMatcher(Token_Colon, ":"))
+	l.AddMatcher(golexer.NewKeywordMatcher(Token_Enum, "enum"))
+
+	l.AddMatcher(golexer.NewIdentifierMatcher(Token_Identifier))
+
+	l.AddMatcher(golexer.NewUnknownMatcher(Token_Unknown))
+
+	return &sprotoParser{
+		Parser:         golexer.NewParser(l, srcName),
+		commentsByLine: make(map[int]string),
+	}
 }

@@ -9,6 +9,7 @@ func parseField(p *sprotoParser, d *Descriptor) {
 
 	fd := newFieldDescriptor(d)
 
+	nameToken := p.RawToken()
 	// 字段名
 	fd.Name = p.Expect(Token_Identifier).Value()
 
@@ -58,6 +59,8 @@ func parseField(p *sprotoParser, d *Descriptor) {
 
 	}
 	// )
+
+	fd.CommentGroup = p.CommentGroupByLine(nameToken.Line())
 
 	// 尝试首次解析
 	if need2Pass, _ := pf.resolve(1); need2Pass {

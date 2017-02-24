@@ -3,6 +3,7 @@ package meta
 import "fmt"
 
 type FieldDescriptor struct {
+	*CommentGroup
 	Name      string
 	Type      FieldType
 	Tag       int
@@ -102,6 +103,7 @@ func (self *FieldDescriptor) parseType(name string) (ft FieldType, structType *D
 
 func newFieldDescriptor(d *Descriptor) *FieldDescriptor {
 	return &FieldDescriptor{
-		Struct: d,
+		CommentGroup: newCommentGroup(),
+		Struct:       d,
 	}
 }

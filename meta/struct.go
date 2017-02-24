@@ -6,6 +6,7 @@ import (
 )
 
 type Descriptor struct {
+	*CommentGroup
 	Name string
 
 	Fields      []*FieldDescriptor
@@ -41,7 +42,8 @@ func (self *Descriptor) String() string {
 
 	bf.WriteString(self.Name)
 
-	bf.WriteString(":\n")
+	bf.WriteString(":")
+	bf.WriteString("\n")
 
 	for _, fd := range self.Fields {
 		bf.WriteString("	")
@@ -62,8 +64,9 @@ func (self *Descriptor) addField(fd *FieldDescriptor) {
 
 func newDescriptor(f *FileDescriptor) *Descriptor {
 	return &Descriptor{
-		File:        f,
-		FieldByName: make(map[string]*FieldDescriptor),
-		FieldByTag:  make(map[int]*FieldDescriptor),
+		CommentGroup: newCommentGroup(),
+		File:         f,
+		FieldByName:  make(map[string]*FieldDescriptor),
+		FieldByTag:   make(map[int]*FieldDescriptor),
 	}
 }

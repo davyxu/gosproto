@@ -14,5 +14,11 @@ func TestParser(t *testing.T) {
 		t.FailNow()
 	}
 
+	v, _ := fileD.StructByName["PhoneNumber"]
+	//f, _ := v.FieldByName["number"]
+
+	tag, _ := v.MatchTag("agent")
+	fmt.Println("tag: ", tag)
+
 	fmt.Println(fileD.String())
 }

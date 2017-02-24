@@ -7,12 +7,14 @@ import (
 func parseStruct(p *sprotoParser, fileD *FileDescriptor) {
 
 	// .
-	p.Expect(Token_Dot)
+	dotToken := p.Expect(Token_Dot)
 
 	d := newDescriptor(fileD)
 
 	// 名字
 	d.Name = p.Expect(Token_Identifier).Value()
+
+	d.CommentGroup = p.CommentGroupByLine(dotToken.Line())
 
 	// {
 	p.Expect(Token_CurlyBraceL)
