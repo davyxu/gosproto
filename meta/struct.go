@@ -29,8 +29,8 @@ type Descriptor struct {
 func (self *Descriptor) MaxTag() (ret int) {
 
 	for _, fd := range self.Fields {
-		if fd.Tag > ret {
-			ret = fd.Tag
+		if fd.TagNumber() > ret {
+			ret = fd.TagNumber()
 		}
 
 	}
