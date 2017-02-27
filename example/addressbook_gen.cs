@@ -69,10 +69,10 @@ namespace example
 	}
 
 	public class MyData : SprotoTypeBase {
-		private static int max_field_count = 7;
+		private static int max_field_count = 8;
 		
 		
-		private string _name; // tag 0
+		private string _name; // tag 1
 		public string name {
 			get{ return _name; }
 			set{ base.has_field.set_field(0,true); _name = value; }
@@ -81,7 +81,7 @@ namespace example
 			get { return base.has_field.has_field(0); }
 		}
 		
-		private MyCar _type; // tag 1
+		private MyCar _type; // tag 2
 		public MyCar type {
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
@@ -90,7 +90,7 @@ namespace example
 			get { return base.has_field.has_field(1); }
 		}
 		
-		private Int32 _int32; // tag 2
+		private Int32 _int32; // tag 3
 		public Int32 int32 {
 			get{ return _int32; }
 			set{ base.has_field.set_field(2,true); _int32 = value; }
@@ -126,6 +126,15 @@ namespace example
 			get { return base.has_field.has_field(5); }
 		}
 		
+		private bool _bool; // tag 7
+		public bool bool {
+			get{ return _bool; }
+			set{ base.has_field.set_field(6,true); _bool = value; }
+		}
+		public bool HasBool{
+			get { return base.has_field.has_field(6); }
+		}
+		
 		
 		public MyData() : base(max_field_count) {}
 		
@@ -138,15 +147,15 @@ namespace example
 			while (-1 != (tag = base.deserialize.read_tag ())) {
 				switch (tag) {
 				
-				case 0:
+				case 1:
 					this.name = base.deserialize.read_string();
 					break;
 				
-				case 1:
+				case 2:
 					this.type = base.deserialize.read_enum<MyCar>();
 					break;
 				
-				case 2:
+				case 3:
 					this.int32 = base.deserialize.read_int32();
 					break;
 				
@@ -162,6 +171,10 @@ namespace example
 					this.uint64 = base.deserialize.read_uint64();
 					break;
 				
+				case 7:
+					this.bool = base.deserialize.read_boolean();
+					break;
+				
 				default:
 					base.deserialize.read_unknow_data ();
 					break;
@@ -174,15 +187,15 @@ namespace example
 
 			
 			if (base.has_field.has_field (0)) {
-				base.serialize.write_string(this.name, 0);
+				base.serialize.write_string(this.name, 1);
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_enum(this.type, 1);
+				base.serialize.write_enum(this.type, 2);
 			}
 			
 			if (base.has_field.has_field (2)) {
-				base.serialize.write_int32(this.int32, 2);
+				base.serialize.write_int32(this.int32, 3);
 			}
 			
 			if (base.has_field.has_field (3)) {
@@ -195,6 +208,10 @@ namespace example
 			
 			if (base.has_field.has_field (5)) {
 				base.serialize.write_uint64(this.uint64, 6);
+			}
+			
+			if (base.has_field.has_field (6)) {
+				base.serialize.write_boolean(this.bool, 7);
 			}
 			
 

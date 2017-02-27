@@ -1,96 +1,76 @@
 
 
-# [agent] client -> battle # comment
 
-.PhoneNumber { 
-	
+message PhoneNumber {
 	# 头 
-	number 0 : string # 哈哈
-		
-	# 头
+	number 0 string# 哈哈		
+		# 头 
+# 哈哈	
+# 头
 # 哈哈 
-	type 1 : int32 
+	type 1 int32	
 		
 }
 
 
-
-.Person { 
+message Person {
 	
-	 
-	name 0 : string 
+	name 0 string	
 		
-	 
-	id 1 : int32 
+	id 1 int32	
 		
-	 
-	email 2 : string 
+	email 2 string	
 		
-	 
-	phone 3 : *PhoneNumber 
+	phone 3 *PhoneNumber	
 		
 }
 
 
-
-.AddressBook { 
+message AddressBook {
 	
-	 
-	person 0 : *Person 
+	person 0 *Person	
 		
 }
 
 
-enum MyCar { 
-
+enum MyCar {
 	
-	 
 	Monkey = 1
 		
-	 
 	Monk = 2
 		
-	 
 	Pig = 3
 		
 }
 
 
-
-.MyData { 
+message MyData {
 	
-	 
-	name 0 : string 
+	name  string	
 		
-	 
-	type 1 : MyCar 
+	type  MyCar	
 		
-	 
-	int32 2 : int32 # extend standard
+	int32  int32# extend standard		
+		# extend standard	
+# extend standard 
+	uint32  uint32	
 		
-	# extend standard 
-	uint32 4 : uint32 
+	int64  int64	
 		
-	 
-	int64 5 : int64 
+	uint64  uint64	
 		
-	 
-	uint64 6 : uint64 
+	bool  bool	
 		
 }
 
 
-
-.MyProfile { 
+message MyProfile {
 	
-	 
-	nameField 1 : MyData 
+	nameField 1 MyData	
 		
-	 
-	nameArray 2 : *MyData 
+	nameArray 2 *MyData	
 		
-	 
-	nameMap 3 : *MyData(type) 
+	nameMap 3 *MyData(type)	
 		
 }
 

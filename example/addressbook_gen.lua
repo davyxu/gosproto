@@ -31,12 +31,13 @@ local sproto = {
 }
 
 .MyData {		
-	name 0 : string 	
-	type 1 : integer 	
-	int32 2 : integer 	
+	name 1 : string 	
+	type 2 : integer 	
+	int32 3 : integer 	
 	uint32 4 : integer 	
 	int64 5 : integer 	
-	uint64 6 : integer 
+	uint64 6 : integer 	
+	bool 7 : boolean 
 }
 
 .MyProfile {		

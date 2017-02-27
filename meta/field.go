@@ -82,6 +82,8 @@ func (self *FieldDescriptor) CompatibleTypeName() string {
 func (self *FieldDescriptor) TypeName() string {
 
 	switch self.Type {
+	case FieldType_Bool:
+		return "bool"
 
 	case FieldType_Struct, FieldType_Enum:
 		return self.Complex.Name

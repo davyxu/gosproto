@@ -61,17 +61,19 @@ type AddressBook struct {
 func (self *AddressBook) String() string { return goobjfmt.CompactTextString(self) }
 
 type MyData struct {
-	Name string `sproto:"string,0,name=Name"`
+	Name string `sproto:"string,1,name=Name"`
 
-	Type MyCar `sproto:"integer,1,name=Type"`
+	Type MyCar `sproto:"integer,2,name=Type"`
 
-	Int32 int32 `sproto:"integer,2,name=Int32"`
+	Int32 int32 `sproto:"integer,3,name=Int32"`
 
 	Uint32 uint32 `sproto:"integer,4,name=Uint32"`
 
 	Int64 int64 `sproto:"integer,5,name=Int64"`
 
 	Uint64 uint64 `sproto:"integer,6,name=Uint64"`
+
+	Bool bool `sproto:"boolean,7,name=Bool"`
 }
 
 func (self *MyData) String() string { return goobjfmt.CompactTextString(self) }

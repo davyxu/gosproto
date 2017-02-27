@@ -45,6 +45,10 @@ func ParseFieldType(str string) FieldType {
 		return t
 	}
 
+	if str == "bool" {
+		return FieldType_Bool
+	}
+
 	return FieldType_None
 }
 
