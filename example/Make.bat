@@ -16,8 +16,8 @@ sprotogen --type=sproto --out=addressbook_gen.sproto addressbook.sp
 @IF %ERRORLEVEL% NEQ 0 pause
 
 : Format sp file
-sprotogen --type=sp --out=addressbook_gen.sp addressbook.sp
-@IF %ERRORLEVEL% NEQ 0 pause
+: sprotogen --type=sp --out=addressbook_gen.sp addressbook.sp
+: @IF %ERRORLEVEL% NEQ 0 pause
 
 : Generate c# source file by sproto
 sprotogen --type=cs --out=addressbook_gen.cs --package=example addressbook.sp

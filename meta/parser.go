@@ -16,7 +16,8 @@ const (
 	Token_String
 	Token_WhiteSpace
 	Token_Identifier
-	Token_Comment
+	Token_UnixComment
+	Token_CStyleComment
 	Token_Colon       // :
 	Token_ParenL      // (
 	Token_ParenR      // )
@@ -55,7 +56,8 @@ func (self *sprotoParser) NextToken() {
 
 		switch self.TokenID() {
 
-		case Token_Comment:
+		case Token_UnixComment,
+			Token_CStyleComment:
 			self.commentsByLine[self.RawToken().Line()] = self.TokenValue()
 		default:
 			return
@@ -115,7 +117,8 @@ func newSProtoParser(srcName string) *sprotoParser {
 
 	l.AddIgnoreMatcher(golexer.NewWhiteSpaceMatcher(Token_WhiteSpace))
 	l.AddIgnoreMatcher(golexer.NewLineEndMatcher(Token_LineEnd))
-	l.AddMatcher(golexer.NewUnixStyleCommentMatcher(Token_Comment))
+	l.AddMatcher(golexer.NewUnixStyleCommentMatcher(Token_UnixComment))
+	l.AddMatcher(golexer.NewCStyleCommentMatcher(Token_CStyleComment))
 
 	l.AddMatcher(golexer.NewSignMatcher(Token_CurlyBraceL, "{"))
 	l.AddMatcher(golexer.NewSignMatcher(Token_CurlyBraceR, "}"))

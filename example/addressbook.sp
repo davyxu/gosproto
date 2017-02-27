@@ -1,4 +1,4 @@
-
+// extend standard
 
 
 message PhoneNumber {
@@ -50,9 +50,8 @@ message MyData {
 		
 	type  MyCar	
 		
-	int32  int32# extend standard		
-		# extend standard	
-# extend standard 
+	int32  int32    // extend standard
+
 	uint32  uint32	
 		
 	int64  int64	
