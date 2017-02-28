@@ -75,6 +75,17 @@ namespace {{.PackageName}}
 	}
 {{end}}
 
+    public class RegisterEntry
+    {
+        static readonly Type[] _types = new Type[]{ {{range .Structs}}
+                typeof({{.Name}}), // {{.MsgID}}{{end}}
+            };
+
+        public static Type[] GetClassTypes()
+        {
+            return _types;
+        }
+    }
 }
 `
 
