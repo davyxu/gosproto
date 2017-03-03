@@ -53,11 +53,13 @@ func readUint64(buf []byte) uint64 {
 }
 
 func decodeBool(val *uint16, data []byte, sf *SprotoField, v reflect.Value) error {
-	b := true
+
 	if *val == 0 {
-		b = false
+		v.SetBool(false)
+	} else {
+		v.SetBool(true)
 	}
-	v.Addr().Set(reflect.ValueOf(&b))
+
 	return nil
 }
 
@@ -97,7 +99,7 @@ func decodeString(val *uint16, data []byte, sf *SprotoField, v reflect.Value) er
 func decodeBytes(val *uint16, data []byte, sf *SprotoField, v reflect.Value) error {
 	buf := make([]byte, len(data))
 	copy(buf, data)
-	v.Set(reflect.ValueOf(buf))
+	v.SetBytes(buf)
 	return nil
 }
 
