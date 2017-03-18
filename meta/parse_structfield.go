@@ -40,6 +40,12 @@ func parseStructField(p *sprotoParser, d *Descriptor) {
 		fd.Repeatd = true
 
 		typeName = p.Expect(Token_Identifier).Value()
+	case Token_BracketL:
+		p.NextToken()
+		p.Expect(Token_BracketR)
+		fd.Repeatd = true
+
+		typeName = p.Expect(Token_Identifier).Value()
 
 	case Token_Identifier:
 		// 普通字段

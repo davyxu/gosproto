@@ -35,7 +35,12 @@ func (self *FieldDescriptor) CompatibleTypeString() string {
 func (self *FieldDescriptor) typeStr(compatible bool) (ret string) {
 
 	if self.Repeatd {
-		ret = "*"
+		if compatible {
+			ret = "*"
+		} else {
+			ret = "[]"
+		}
+
 	}
 
 	if compatible {

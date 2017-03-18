@@ -45,13 +45,13 @@ enum MyCar {
 .MyData {
 	
 	
-	name 0 : string  
+	name 0 string
 	
-	type 1 : enum  
+	type 1 MyCar
 	
-	int32 2 : int32 #  extend standard 
+	int32 2  int32 //  extend standard
 	#  extend standard
-	uint32 4 : uint32  
+	uint32 4 uint32
 	
 	int64 5 : int64  
 	

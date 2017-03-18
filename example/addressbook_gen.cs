@@ -23,13 +23,14 @@ namespace example
 		private static int max_field_count = 1;
 		
 		
+		[SprotoHasField]
+		public bool HasPerson{
+			get { return base.has_field.has_field(0); }
+		}
 		private List<Person> _person; // tag 0
 		public List<Person> person {
 			get{ return _person; }
 			set{ base.has_field.set_field(0,true); _person = value; }
-		}
-		public bool HasPerson{
-			get { return base.has_field.has_field(0); }
 		}
 		
 		
@@ -72,67 +73,74 @@ namespace example
 		private static int max_field_count = 8;
 		
 		
+		[SprotoHasField]
+		public bool HasName{
+			get { return base.has_field.has_field(0); }
+		}
 		private string _name; // tag 1
 		public string name {
 			get{ return _name; }
 			set{ base.has_field.set_field(0,true); _name = value; }
 		}
-		public bool HasName{
-			get { return base.has_field.has_field(0); }
-		}
 		
+		[SprotoHasField]
+		public bool HasType{
+			get { return base.has_field.has_field(1); }
+		}
 		private MyCar _type; // tag 2
 		public MyCar type {
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
 		}
-		public bool HasType{
-			get { return base.has_field.has_field(1); }
-		}
 		
+		[SprotoHasField]
+		public bool HasInt32{
+			get { return base.has_field.has_field(2); }
+		}
 		private Int32 _int32; // tag 3
 		public Int32 int32 {
 			get{ return _int32; }
 			set{ base.has_field.set_field(2,true); _int32 = value; }
 		}
-		public bool HasInt32{
-			get { return base.has_field.has_field(2); }
-		}
 		
+		[SprotoHasField]
+		public bool HasUint32{
+			get { return base.has_field.has_field(3); }
+		}
 		private UInt32 _uint32; // tag 4
 		public UInt32 uint32 {
 			get{ return _uint32; }
 			set{ base.has_field.set_field(3,true); _uint32 = value; }
 		}
-		public bool HasUint32{
-			get { return base.has_field.has_field(3); }
-		}
 		
+		[SprotoHasField]
+		public bool HasInt64{
+			get { return base.has_field.has_field(4); }
+		}
 		private Int64 _int64; // tag 5
 		public Int64 int64 {
 			get{ return _int64; }
 			set{ base.has_field.set_field(4,true); _int64 = value; }
 		}
-		public bool HasInt64{
-			get { return base.has_field.has_field(4); }
-		}
 		
+		[SprotoHasField]
+		public bool HasUint64{
+			get { return base.has_field.has_field(5); }
+		}
 		private UInt64 _uint64; // tag 6
 		public UInt64 uint64 {
 			get{ return _uint64; }
 			set{ base.has_field.set_field(5,true); _uint64 = value; }
 		}
-		public bool HasUint64{
-			get { return base.has_field.has_field(5); }
-		}
 		
+		[SprotoHasField]
+		public bool HasBool{
+			get { return base.has_field.has_field(6); }
+		}
 		private bool _bool; // tag 7
 		public bool bool {
 			get{ return _bool; }
 			set{ base.has_field.set_field(6,true); _bool = value; }
-		}
-		public bool HasBool{
-			get { return base.has_field.has_field(6); }
 		}
 		
 		
@@ -223,31 +231,34 @@ namespace example
 		private static int max_field_count = 4;
 		
 		
+		[SprotoHasField]
+		public bool HasNameField{
+			get { return base.has_field.has_field(0); }
+		}
 		private MyData _nameField; // tag 1
 		public MyData nameField {
 			get{ return _nameField; }
 			set{ base.has_field.set_field(0,true); _nameField = value; }
 		}
-		public bool HasNameField{
-			get { return base.has_field.has_field(0); }
-		}
 		
+		[SprotoHasField]
+		public bool HasNameArray{
+			get { return base.has_field.has_field(1); }
+		}
 		private List<MyData> _nameArray; // tag 2
 		public List<MyData> nameArray {
 			get{ return _nameArray; }
 			set{ base.has_field.set_field(1,true); _nameArray = value; }
 		}
-		public bool HasNameArray{
-			get { return base.has_field.has_field(1); }
-		}
 		
+		[SprotoHasField]
+		public bool HasNameMap{
+			get { return base.has_field.has_field(2); }
+		}
 		private Dictionary<MyCar,MyData> _nameMap; // tag 3
 		public Dictionary<MyCar,MyData> nameMap {
 			get{ return _nameMap; }
 			set{ base.has_field.set_field(2,true); _nameMap = value; }
-		}
-		public bool HasNameMap{
-			get { return base.has_field.has_field(2); }
 		}
 		
 		
@@ -306,40 +317,44 @@ namespace example
 		private static int max_field_count = 4;
 		
 		
+		[SprotoHasField]
+		public bool HasName{
+			get { return base.has_field.has_field(0); }
+		}
 		private string _name; // tag 0
 		public string name {
 			get{ return _name; }
 			set{ base.has_field.set_field(0,true); _name = value; }
 		}
-		public bool HasName{
-			get { return base.has_field.has_field(0); }
-		}
 		
+		[SprotoHasField]
+		public bool HasId{
+			get { return base.has_field.has_field(1); }
+		}
 		private Int32 _id; // tag 1
 		public Int32 id {
 			get{ return _id; }
 			set{ base.has_field.set_field(1,true); _id = value; }
 		}
-		public bool HasId{
-			get { return base.has_field.has_field(1); }
-		}
 		
+		[SprotoHasField]
+		public bool HasEmail{
+			get { return base.has_field.has_field(2); }
+		}
 		private string _email; // tag 2
 		public string email {
 			get{ return _email; }
 			set{ base.has_field.set_field(2,true); _email = value; }
 		}
-		public bool HasEmail{
-			get { return base.has_field.has_field(2); }
-		}
 		
+		[SprotoHasField]
+		public bool HasPhone{
+			get { return base.has_field.has_field(3); }
+		}
 		private List<PhoneNumber> _phone; // tag 3
 		public List<PhoneNumber> phone {
 			get{ return _phone; }
 			set{ base.has_field.set_field(3,true); _phone = value; }
-		}
-		public bool HasPhone{
-			get { return base.has_field.has_field(3); }
 		}
 		
 		
@@ -406,22 +421,24 @@ namespace example
 		private static int max_field_count = 2;
 		
 		
+		[SprotoHasField]
+		public bool HasNumber{
+			get { return base.has_field.has_field(0); }
+		}
 		private string _number; // tag 0
 		public string number {
 			get{ return _number; }
 			set{ base.has_field.set_field(0,true); _number = value; }
 		}
-		public bool HasNumber{
-			get { return base.has_field.has_field(0); }
-		}
 		
+		[SprotoHasField]
+		public bool HasType{
+			get { return base.has_field.has_field(1); }
+		}
 		private Int32 _type; // tag 1
 		public Int32 type {
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
-		}
-		public bool HasType{
-			get { return base.has_field.has_field(1); }
 		}
 		
 		
@@ -469,4 +486,19 @@ namespace example
 	}
 
 
+    public class RegisterEntry
+    {
+        static readonly Type[] _types = new Type[]{ 
+                typeof(AddressBook), // 2618161298
+                typeof(MyData), // 2244887298
+                typeof(MyProfile), // 438153711
+                typeof(Person), // 1498745430
+                typeof(PhoneNumber), // 4271979557
+            };
+
+        public static Type[] GetClassTypes()
+        {
+            return _types;
+        }
+    }
 }

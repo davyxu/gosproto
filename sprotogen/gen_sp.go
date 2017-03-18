@@ -59,7 +59,7 @@ func (self *fieldModel) SpFieldString() string {
 
 func (self *fieldModel) SpTrailingComment() string {
 
-	return addCommentSignAtEachLine("#", self.Trailing)
+	return addCommentSignAtEachLine("//", self.Trailing)
 }
 
 func (self *fieldModel) TagString() string {
@@ -72,12 +72,12 @@ func (self *fieldModel) TagString() string {
 
 func (self *fieldModel) SpLeadingComment() string {
 
-	return addCommentSignAtEachLine("#", self.Leading)
+	return addCommentSignAtEachLine("//", self.Leading)
 }
 
 func (self *structModel) SpLeadingComment() string {
 
-	return addCommentSignAtEachLine("#", self.Leading)
+	return addCommentSignAtEachLine("//", self.Leading)
 }
 
 func (self *structModel) TypeName() string {
