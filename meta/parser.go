@@ -23,6 +23,8 @@ const (
 	Token_ParenR      // )
 	Token_CurlyBraceL // {
 	Token_CurlyBraceR // }
+	Token_BracketL    // [
+	Token_BracketR    // ]
 	Token_Star        // *
 	Token_Dot         // .
 	Token_Enum        // Enum
@@ -124,6 +126,8 @@ func newSProtoParser(srcName string) *sprotoParser {
 	l.AddMatcher(golexer.NewSignMatcher(Token_CurlyBraceR, "}"))
 	l.AddMatcher(golexer.NewSignMatcher(Token_ParenL, "("))
 	l.AddMatcher(golexer.NewSignMatcher(Token_ParenR, ")"))
+	l.AddMatcher(golexer.NewSignMatcher(Token_BracketL, "["))
+	l.AddMatcher(golexer.NewSignMatcher(Token_BracketR, "]"))
 	l.AddMatcher(golexer.NewSignMatcher(Token_Star, "*"))
 	l.AddMatcher(golexer.NewSignMatcher(Token_Dot, "."))
 	l.AddMatcher(golexer.NewSignMatcher(Token_Assign, "="))

@@ -29,13 +29,14 @@ namespace {{.PackageName}}
 		private static int max_field_count = {{.MaxFieldCount}};
 		
 		{{range .StFields}}
+		[SprotoHasField]
+		public bool Has{{.UpperName}}{
+			get { return base.has_field.has_field({{.FieldIndex}}); }
+		}
 		private {{.CSTypeString}} _{{.Name}}; // tag {{.TagNumber}}
 		public {{.CSTypeString}} {{.Name}} {
 			get{ return _{{.Name}}; }
 			set{ base.has_field.set_field({{.FieldIndex}},true); _{{.Name}} = value; }
-		}
-		public bool Has{{.UpperName}}{
-			get { return base.has_field.has_field({{.FieldIndex}}); }
 		}
 		{{end}}
 		
