@@ -70,14 +70,14 @@ namespace example
 	}
 
 	public class MyData : SprotoTypeBase {
-		private static int max_field_count = 8;
+		private static int max_field_count = 7;
 		
 		
 		[SprotoHasField]
 		public bool HasName{
 			get { return base.has_field.has_field(0); }
 		}
-		private string _name; // tag 1
+		private string _name; // tag 0
 		public string name {
 			get{ return _name; }
 			set{ base.has_field.set_field(0,true); _name = value; }
@@ -87,7 +87,7 @@ namespace example
 		public bool HasType{
 			get { return base.has_field.has_field(1); }
 		}
-		private MyCar _type; // tag 2
+		private MyCar _type; // tag 1
 		public MyCar type {
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
@@ -97,7 +97,7 @@ namespace example
 		public bool HasInt32{
 			get { return base.has_field.has_field(2); }
 		}
-		private Int32 _int32; // tag 3
+		private Int32 _int32; // tag 2
 		public Int32 int32 {
 			get{ return _int32; }
 			set{ base.has_field.set_field(2,true); _int32 = value; }
@@ -107,7 +107,7 @@ namespace example
 		public bool HasUint32{
 			get { return base.has_field.has_field(3); }
 		}
-		private UInt32 _uint32; // tag 4
+		private UInt32 _uint32; // tag 3
 		public UInt32 uint32 {
 			get{ return _uint32; }
 			set{ base.has_field.set_field(3,true); _uint32 = value; }
@@ -117,7 +117,7 @@ namespace example
 		public bool HasInt64{
 			get { return base.has_field.has_field(4); }
 		}
-		private Int64 _int64; // tag 5
+		private Int64 _int64; // tag 4
 		public Int64 int64 {
 			get{ return _int64; }
 			set{ base.has_field.set_field(4,true); _int64 = value; }
@@ -127,7 +127,7 @@ namespace example
 		public bool HasUint64{
 			get { return base.has_field.has_field(5); }
 		}
-		private UInt64 _uint64; // tag 6
+		private UInt64 _uint64; // tag 5
 		public UInt64 uint64 {
 			get{ return _uint64; }
 			set{ base.has_field.set_field(5,true); _uint64 = value; }
@@ -137,7 +137,7 @@ namespace example
 		public bool HasBool{
 			get { return base.has_field.has_field(6); }
 		}
-		private bool _bool; // tag 7
+		private bool _bool; // tag 6
 		public bool bool {
 			get{ return _bool; }
 			set{ base.has_field.set_field(6,true); _bool = value; }
@@ -155,31 +155,31 @@ namespace example
 			while (-1 != (tag = base.deserialize.read_tag ())) {
 				switch (tag) {
 				
-				case 1:
+				case 0:
 					this.name = base.deserialize.read_string();
 					break;
 				
-				case 2:
+				case 1:
 					this.type = base.deserialize.read_enum<MyCar>();
 					break;
 				
-				case 3:
+				case 2:
 					this.int32 = base.deserialize.read_int32();
 					break;
 				
-				case 4:
+				case 3:
 					this.uint32 = base.deserialize.read_uint32();
 					break;
 				
-				case 5:
+				case 4:
 					this.int64 = base.deserialize.read_int64();
 					break;
 				
-				case 6:
+				case 5:
 					this.uint64 = base.deserialize.read_uint64();
 					break;
 				
-				case 7:
+				case 6:
 					this.bool = base.deserialize.read_boolean();
 					break;
 				
@@ -195,31 +195,31 @@ namespace example
 
 			
 			if (base.has_field.has_field (0)) {
-				base.serialize.write_string(this.name, 1);
+				base.serialize.write_string(this.name, 0);
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_enum(this.type, 2);
+				base.serialize.write_enum(this.type, 1);
 			}
 			
 			if (base.has_field.has_field (2)) {
-				base.serialize.write_int32(this.int32, 3);
+				base.serialize.write_int32(this.int32, 2);
 			}
 			
 			if (base.has_field.has_field (3)) {
-				base.serialize.write_uint32(this.uint32, 4);
+				base.serialize.write_uint32(this.uint32, 3);
 			}
 			
 			if (base.has_field.has_field (4)) {
-				base.serialize.write_int64(this.int64, 5);
+				base.serialize.write_int64(this.int64, 4);
 			}
 			
 			if (base.has_field.has_field (5)) {
-				base.serialize.write_uint64(this.uint64, 6);
+				base.serialize.write_uint64(this.uint64, 5);
 			}
 			
 			if (base.has_field.has_field (6)) {
-				base.serialize.write_boolean(this.bool, 7);
+				base.serialize.write_boolean(this.bool, 6);
 			}
 			
 
@@ -228,14 +228,14 @@ namespace example
 	}
 
 	public class MyProfile : SprotoTypeBase {
-		private static int max_field_count = 4;
+		private static int max_field_count = 3;
 		
 		
 		[SprotoHasField]
 		public bool HasNameField{
 			get { return base.has_field.has_field(0); }
 		}
-		private MyData _nameField; // tag 1
+		private MyData _nameField; // tag 0
 		public MyData nameField {
 			get{ return _nameField; }
 			set{ base.has_field.set_field(0,true); _nameField = value; }
@@ -245,7 +245,7 @@ namespace example
 		public bool HasNameArray{
 			get { return base.has_field.has_field(1); }
 		}
-		private List<MyData> _nameArray; // tag 2
+		private List<MyData> _nameArray; // tag 1
 		public List<MyData> nameArray {
 			get{ return _nameArray; }
 			set{ base.has_field.set_field(1,true); _nameArray = value; }
@@ -255,7 +255,7 @@ namespace example
 		public bool HasNameMap{
 			get { return base.has_field.has_field(2); }
 		}
-		private Dictionary<MyCar,MyData> _nameMap; // tag 3
+		private Dictionary<MyCar,MyData> _nameMap; // tag 2
 		public Dictionary<MyCar,MyData> nameMap {
 			get{ return _nameMap; }
 			set{ base.has_field.set_field(2,true); _nameMap = value; }
@@ -273,15 +273,15 @@ namespace example
 			while (-1 != (tag = base.deserialize.read_tag ())) {
 				switch (tag) {
 				
-				case 1:
+				case 0:
 					this.nameField = base.deserialize.read_obj<MyData>();
 					break;
 				
-				case 2:
+				case 1:
 					this.nameArray = base.deserialize.read_obj_list<MyData>();
 					break;
 				
-				case 3:
+				case 2:
 					this.nameMap = base.deserialize.read_map<MyCar,MyData>(v => v.type);
 					break;
 				
@@ -297,15 +297,15 @@ namespace example
 
 			
 			if (base.has_field.has_field (0)) {
-				base.serialize.write_obj(this.nameField, 1);
+				base.serialize.write_obj(this.nameField, 0);
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_obj(this.nameArray, 2);
+				base.serialize.write_obj(this.nameArray, 1);
 			}
 			
 			if (base.has_field.has_field (2)) {
-				base.serialize.write_obj(this.nameMap, 3);
+				base.serialize.write_obj(this.nameMap, 2);
 			}
 			
 

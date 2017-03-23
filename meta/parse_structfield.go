@@ -21,7 +21,13 @@ func parseStructField(p *sprotoParser, d *Descriptor) {
 		// tag
 		fd.Tag = p.Expect(Token_Numeral).ToInt()
 	} else { // 没写就自动生成
-		fd.AutoTag = d.MaxTag() + 1
+
+		if len(d.Fields) == 0 {
+			fd.AutoTag = 0
+		} else {
+			fd.AutoTag = d.MaxTag() + 1
+		}
+
 	}
 
 	if p.TokenID() == Token_Colon {

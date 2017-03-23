@@ -61,7 +61,7 @@ func rawParse(fileD *FileDescriptor, data string, srcName string) (retErr error)
 
 	defer golexer.ErrorCatcher(func(err error) {
 
-		fmt.Printf("%s %s\n", p.PreTokenPos().String(), err.Error())
+		fmt.Printf("%s %s\n", p.PreTokenPos().String(), err.Error(), srcName)
 
 		retErr = err
 

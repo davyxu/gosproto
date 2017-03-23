@@ -25,6 +25,7 @@ namespace {{.PackageName}}
 {{end}}
 
 {{range .Structs}}
+	{{.CSClassAttr}}
 	public class {{.Name}} : SprotoTypeBase {
 		private static int max_field_count = {{.MaxFieldCount}};
 		
@@ -33,6 +34,7 @@ namespace {{.PackageName}}
 		public bool Has{{.UpperName}}{
 			get { return base.has_field.has_field({{.FieldIndex}}); }
 		}
+		{{.CSFieldAttr}}
 		private {{.CSTypeString}} _{{.Name}}; // tag {{.TagNumber}}
 		public {{.CSTypeString}} {{.Name}} {
 			get{ return _{{.Name}}; }
@@ -234,11 +236,21 @@ func (self *fieldModel) CSTypeString() string {
 	return b.String()
 }
 
-func gen_csharp(fileD *meta.FileDescriptor, packageName, filename string) {
+func (self *fieldModel) CSFieldAttr() string {
+	return self.st.f.CSFieldAttr
+}
+
+func (self *structModel) CSClassAttr() string {
+	return self.f.CSClassAttr
+}
+
+func gen_csharp(fileD *meta.FileDescriptor, packageName, filename, classattr, fieldattr string) {
 
 	fm := &fileModel{
 		FileDescriptor: fileD,
 		PackageName:    packageName,
+		CSClassAttr:    classattr,
+		CSFieldAttr:    fieldattr,
 	}
 
 	addData(fm, fileD)

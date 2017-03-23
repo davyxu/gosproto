@@ -61,29 +61,29 @@ type AddressBook struct {
 func (self *AddressBook) String() string { return goobjfmt.CompactTextString(self) }
 
 type MyData struct {
-	Name string `sproto:"string,1,name=Name"`
+	Name string `sproto:"string,0,name=Name"`
 
-	Type MyCar `sproto:"integer,2,name=Type"`
+	Type MyCar `sproto:"integer,1,name=Type"`
 
-	Int32 int32 `sproto:"integer,3,name=Int32"`
+	Int32 int32 `sproto:"integer,2,name=Int32"`
 
-	Uint32 uint32 `sproto:"integer,4,name=Uint32"`
+	Uint32 uint32 `sproto:"integer,3,name=Uint32"`
 
-	Int64 int64 `sproto:"integer,5,name=Int64"`
+	Int64 int64 `sproto:"integer,4,name=Int64"`
 
-	Uint64 uint64 `sproto:"integer,6,name=Uint64"`
+	Uint64 uint64 `sproto:"integer,5,name=Uint64"`
 
-	Bool bool `sproto:"boolean,7,name=Bool"`
+	Bool bool `sproto:"boolean,6,name=Bool"`
 }
 
 func (self *MyData) String() string { return goobjfmt.CompactTextString(self) }
 
 type MyProfile struct {
-	NameField *MyData `sproto:"struct,1,name=NameField"`
+	NameField *MyData `sproto:"struct,0,name=NameField"`
 
-	NameArray []*MyData `sproto:"struct,2,array,name=NameArray"`
+	NameArray []*MyData `sproto:"struct,1,array,name=NameArray"`
 
-	NameMap []*MyData `sproto:"struct,3,array,name=NameMap"`
+	NameMap []*MyData `sproto:"struct,2,array,name=NameMap"`
 }
 
 func (self *MyProfile) String() string { return goobjfmt.CompactTextString(self) }

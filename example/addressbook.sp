@@ -2,33 +2,32 @@
 
 
 message PhoneNumber {
-	# 头 
-	number 0 string# 哈哈		
-		# 头 
-# 哈哈	
-# 头
-# 哈哈 
-	type 1 int32	
+
+	// 头注释
+	number string // 尾注释
+
+    // 整形
+	type int32
 		
 }
 
 
 message Person {
 	
-	name 0 string	
+	name string
 		
-	id 1 int32	
+	id int32
 		
-	email 2 string	
+	email string
 		
-	phone 3 *PhoneNumber	
+	phone []PhoneNumber
 		
 }
 
 
 message AddressBook {
 	
-	person 0 *Person	
+	person []Person
 		
 }
 
@@ -65,11 +64,11 @@ message MyData {
 
 message MyProfile {
 	
-	nameField 1 MyData	
+	nameField MyData
 		
-	nameArray 2 *MyData	
+	nameArray []MyData
 		
-	nameMap 3 *MyData(type)	
+	nameMap []MyData(type)
 		
 }
 

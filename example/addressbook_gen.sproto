@@ -30,29 +30,29 @@
 
 .MyData {
 	
-	name 1 : string
+	name 0 : string
 	
-	type 2 : integer
+	type 1 : integer
 	
-	int32 3 : integer
+	int32 2 : integer
 	
-	uint32 4 : integer
+	uint32 3 : integer
 	
-	int64 5 : integer
+	int64 4 : integer
 	
-	uint64 6 : integer
+	uint64 5 : integer
 	
-	bool 7 : boolean
+	bool 6 : boolean
 	
 }
 
 .MyProfile {
 	
-	nameField 1 : MyData
+	nameField 0 : MyData
 	
-	nameArray 2 : *MyData
+	nameArray 1 : *MyData
 	
-	nameMap 3 : *MyData(type)
+	nameMap 2 : *MyData(type)
 	
 }
 

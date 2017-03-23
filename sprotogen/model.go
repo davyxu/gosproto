@@ -58,6 +58,10 @@ type fileModel struct {
 	CellnetReg bool
 
 	forceAutoTag bool
+
+	CSClassAttr string
+
+	CSFieldAttr string
 }
 
 func (self *fileModel) Len() int {

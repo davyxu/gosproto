@@ -13,6 +13,8 @@ var paramPackage = flag.String("package", "", "package name in go files")
 var paramType = flag.String("type", "", "output file type")
 var paramCellnetReg = flag.Bool("cellnet_reg", false, "for type go, generate sproto auto register entry for github.com/davyxu/cellnet")
 var paramForceAutoTag = flag.Bool("forceatag", false, "no ouput field tag in sp mode")
+var paramCSClassAttr = flag.String("cs_classattr", "", "add given string to class header as attribute in c sharp file")
+var paramCSFieldAttr = flag.String("cs_fieldattr", "", "add given string to class private field as attribute in c sharp file")
 
 func mergeSchema(filelist []string) *meta.FileDescriptor {
 
@@ -45,7 +47,7 @@ func main() {
 	case "sp":
 		gen_sp(fileD, *paramForceAutoTag)
 	case "cs":
-		gen_csharp(fileD, *paramPackage, *paramOut)
+		gen_csharp(fileD, *paramPackage, *paramOut, *paramCSClassAttr, *paramCSFieldAttr)
 	case "lua":
 		gen_lua(fileD, *paramPackage, *paramOut)
 	default:
