@@ -24,9 +24,9 @@ func mergeSchema(filelist []string) *meta.FileDescriptor {
 	}
 
 	fileD := meta.NewFileDescriptor()
-	errorFileName, err := meta.ParseFileList(fileD, filelist)
+	_, err := meta.ParseFileList(fileD, filelist)
 	if err != nil {
-		fmt.Println(errorFileName, err.Error())
+		//fmt.Println(errorFileName, err.Error())
 		os.Exit(1)
 	}
 

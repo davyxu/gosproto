@@ -1,10 +1,6 @@
 package meta
 
-import (
-	"fmt"
-
-	"github.com/davyxu/golexer"
-)
+import "github.com/davyxu/golexer"
 
 // 自定义的token id
 const (
@@ -24,15 +20,15 @@ type CommentParser struct {
 
 func parseComment(src string) (ret TaggedComment, retErr error) {
 
-	p := NewCommentParser()
+	p := NewCommentParser(src)
 
-	defer golexer.ErrorCatcher(func(err error) {
+	//	defer golexer.ErrorCatcher(func(err error) {
 
-		fmt.Printf("%s %s\n", p.PreTokenPos().String(), err.Error())
+	//		fmt.Printf("%s %s\n", p.PreTokenPos().String(), err.Error())
 
-		retErr = err
+	//		retErr = err
 
-	})
+	//	})
 
 	p.Lexer().Start(src)
 
@@ -78,7 +74,7 @@ func parseComment(src string) (ret TaggedComment, retErr error) {
 	return
 }
 
-func NewCommentParser() *CommentParser {
+func NewCommentParser(src string) *CommentParser {
 
 	l := golexer.NewLexer()
 
@@ -96,6 +92,6 @@ func NewCommentParser() *CommentParser {
 	l.AddMatcher(golexer.NewUnknownMatcher(CommentToken_Unknown))
 
 	return &CommentParser{
-		Parser: golexer.NewParser(l, "comment"),
+		Parser: golexer.NewParser(l, src),
 	}
 }

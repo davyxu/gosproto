@@ -1,12 +1,10 @@
 package meta
 
 import (
-	"fmt"
-	"io/ioutil"
-
 	"errors"
-
+	"fmt"
 	"github.com/davyxu/golexer"
+	"io/ioutil"
 )
 
 func ParseFile(fileName string) (*FileDescriptor, error) {
@@ -61,7 +59,7 @@ func rawParse(fileD *FileDescriptor, data string, srcName string) (retErr error)
 
 	defer golexer.ErrorCatcher(func(err error) {
 
-		fmt.Printf("%s %s\n", p.PreTokenPos().String(), err.Error(), srcName)
+		fmt.Printf("%s %s\n", p.PreTokenPos().String(), err.Error())
 
 		retErr = err
 
