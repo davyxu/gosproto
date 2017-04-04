@@ -40,11 +40,14 @@ func TestMyProfile(t *testing.T) {
 		Uint64: math.MaxUint64,
 	}
 
+	input.SetFloat32(3.14159265)
+	input.SetFloat64(3.14159265)
+
 	var my MyData
 
 	encodeDecodeCompare(t, input, &my)
 
-	t.Log(input.Type.String())
+	t.Log(input.Type.String(), input.Float32(), input.Float64())
 
 	assert(t, input.Name == "genji")
 	assert(t, input.Type == MyCar_Pig)
@@ -69,25 +72,25 @@ func TestAddressBook(t *testing.T) {
 
 	input := &AddressBook{
 		Person: []*Person{
-			&Person{
+			{
 				Name: "Alice",
 				Id:   int32(10000),
 				Phone: []*PhoneNumber{
-					&PhoneNumber{
+					{
 						Number: "123456789",
 						Type:   1,
 					},
-					&PhoneNumber{
+					{
 						Number: "87654321",
 						Type:   2,
 					},
 				},
 			},
-			&Person{
+			{
 				Name: "Bob",
 				Id:   int32(20000),
 				Phone: []*PhoneNumber{
-					&PhoneNumber{
+					{
 						Number: "01234567890",
 						Type:   int32(3),
 					},

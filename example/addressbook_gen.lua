@@ -32,18 +32,20 @@ local sproto = {
 
 .MyData {		
 	name 0 : string 	
-	type 1 : integer 	
-	int32 2 : integer 	
-	uint32 3 : integer 	
-	int64 4 : integer 	
-	uint64 5 : integer 	
-	bool 6 : boolean 
+	Type 1 : integer 	
+	Int32 2 : integer 	
+	Uint32 3 : integer 	
+	Int64 4 : integer 	
+	Uint64 5 : integer 	
+	Bool 6 : boolean 	
+	Float32 7 : integer 	
+	Float64 8 : integer 
 }
 
 .MyProfile {		
 	nameField 0 : MyData 	
 	nameArray 1 : *MyData 	
-	nameMap 2 : *MyData(type) 
+	nameMap 2 : *MyData(Type) 
 }
 
 	]],

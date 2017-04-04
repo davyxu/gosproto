@@ -17,6 +17,8 @@ const (
 	FieldType_String
 	FieldType_Struct
 	FieldType_Enum
+	FieldType_Float32
+	FieldType_Float64
 )
 
 var fieldtypeByStr = map[string]FieldType{
@@ -29,6 +31,8 @@ var fieldtypeByStr = map[string]FieldType{
 	"string":  FieldType_String,
 	"struct":  FieldType_Struct,
 	"enum":    FieldType_Enum,
+	"float32": FieldType_Float32,
+	"float64": FieldType_Float64,
 }
 
 var strByFieldtype = map[FieldType]string{}

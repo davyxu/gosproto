@@ -73,6 +73,7 @@ func (self *sprotoParser) CommentGroupByLine(line int) *CommentGroup {
 	cg := newCommentGroup()
 
 	if comment, ok := self.commentsByLine[line]; ok {
+		cg.addLineComment(comment)
 		cg.Trailing = comment
 	}
 

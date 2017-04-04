@@ -45,19 +45,23 @@ enum MyCar {
 
 message MyData {
 	
-	name  string	
+	name  string
 		
-	type  MyCar	
+	Type  MyCar
 		
-	int32  int32    // extend standard
+	Int32  int32    // extend standard
 
-	uint32  uint32	
+	Uint32  uint32
 		
-	int64  int64	
+	Int64  int64
 		
-	uint64  uint64	
+	Uint64  uint64
 		
-	bool  bool	
+	Bool  bool
+
+	Float32 float32     // [ExtendPrecision]100  # 手动设置精度, 默认1000
+
+	Float64 float64
 		
 }
 
@@ -68,7 +72,7 @@ message MyProfile {
 		
 	nameArray []MyData
 		
-	nameMap []MyData(type)
+	nameMap []MyData(Type)
 		
 }
 

@@ -22,7 +22,11 @@ type CommentGroup struct {
 
 func (self *CommentGroup) addLineComment(text string) {
 
-	if v, err := parseComment(text); err == nil {
+	if text == "" {
+		return
+	}
+
+	if v, err := parseComment(text); err == nil && v.Name != "" {
 		self.taggedComments = append(self.taggedComments, v)
 	}
 }

@@ -32,17 +32,21 @@
 	
 	name 0 : string
 	
-	type 1 : integer
+	Type 1 : integer
 	
-	int32 2 : integer
+	Int32 2 : integer
 	
-	uint32 3 : integer
+	Uint32 3 : integer
 	
-	int64 4 : integer
+	Int64 4 : integer
 	
-	uint64 5 : integer
+	Uint64 5 : integer
 	
-	bool 6 : boolean
+	Bool 6 : boolean
+	
+	Float32 7 : integer
+	
+	Float64 8 : integer
 	
 }
 
@@ -52,7 +56,7 @@
 	
 	nameArray 1 : *MyData
 	
-	nameMap 2 : *MyData(type)
+	nameMap 2 : *MyData(Type)
 	
 }
 

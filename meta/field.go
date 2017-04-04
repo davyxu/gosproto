@@ -1,6 +1,9 @@
 package meta
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 type FieldDescriptor struct {
 	*CommentGroup
@@ -13,6 +16,35 @@ type FieldDescriptor struct {
 	Complex   *Descriptor
 
 	Struct *Descriptor
+}
+
+func (self *FieldDescriptor) IsExtendType() bool {
+
+	switch self.Type {
+	case FieldType_Float32,
+		FieldType_Float64:
+		return true
+	}
+
+	return false
+}
+
+func (self *FieldDescriptor) ExtendTypePrecision() int {
+
+	var precision int = 1000
+	if precisionStr, ok := self.CommentGroup.MatchTag("ExtendPrecision"); ok {
+		if pcs, err := strconv.ParseInt(precisionStr, 10, 64); err == nil {
+			precision = int(pcs)
+		}
+	}
+
+	switch self.Type {
+	case FieldType_Float32,
+		FieldType_Float64:
+		return precision
+	}
+
+	return 0
 }
 
 func (self *FieldDescriptor) TagNumber() int {
@@ -76,6 +108,8 @@ func (self *FieldDescriptor) CompatibleTypeName() string {
 		FieldType_Int64,
 		FieldType_UInt32,
 		FieldType_UInt64,
+		FieldType_Float32,
+		FieldType_Float64,
 		FieldType_Enum:
 		return FieldType_Integer.String()
 	default:

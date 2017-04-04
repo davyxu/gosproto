@@ -39,7 +39,7 @@ func (self {{$enumobj.Name}}) String() string {
 }
 {{end}}
 
-{{range .Structs}}
+{{range $a, $stobj := .Structs}}
 type {{.Name}} struct{
 	{{range .StFields}}
 		{{.GoFieldName}} {{.GoTypeName}} {{.GoTags}} 
@@ -48,6 +48,14 @@ type {{.Name}} struct{
 
 func (self *{{.Name}}) String() string { return goobjfmt.CompactTextString(self) }
 
+{{range .StFields}}{{if .IsExtendType}}
+func (self *{{$stobj.Name}}) {{.GoExtendFieldGetterName}}() {{.GoExtendFieldGetterType}} {
+	{{.GoExtendFieldGetter}}
+}
+func (self *{{$stobj.Name}}) Set{{.GoExtendFieldGetterName}}(v {{.GoExtendFieldGetterType}})  {
+	{{.GoExtendFieldSetter}}
+}
+{{end}} {{end}}
 {{end}}
 
 var SProtoStructs = []reflect.Type{
@@ -63,8 +71,68 @@ func init() {
 
 `
 
-func (self *fieldModel) GoFieldName() string {
+func (self *fieldModel) GoExtendFieldGetterName() string {
 	pname := publicFieldName(self.Name)
+
+	if token.Lookup(pname).IsKeyword() {
+		return pname + "_"
+	}
+
+	return pname
+}
+
+func (self *fieldModel) GoExtendFieldGetter() string {
+
+	switch self.Type {
+	case meta.FieldType_Float32,
+		meta.FieldType_Float64:
+		return fmt.Sprintf("return %s(self.%s) * %f", self.GoExtendFieldGetterType(), self.GoFieldName(), 1.0/float32(self.ExtendTypePrecision()))
+	}
+
+	return "unknown extend type:" + self.Type.String()
+}
+
+func (self *fieldModel) GoExtendFieldSetter() string {
+
+	switch self.Type {
+	case meta.FieldType_Float32:
+		return fmt.Sprintf("self.%s = int32(v* %d)", self.GoFieldName(), self.ExtendTypePrecision())
+	case meta.FieldType_Float64:
+		return fmt.Sprintf("self.%s = int64(v* %d)", self.GoFieldName(), self.ExtendTypePrecision())
+	}
+
+	return "unknown extend type:" + self.Type.String()
+}
+
+func (self *fieldModel) GoExtendFieldGetterType() string {
+	var b bytes.Buffer
+	if self.Repeatd {
+		b.WriteString("[]")
+	}
+
+	// 字段类型映射go的类型
+	switch self.Type {
+	case meta.FieldType_Float32:
+		b.WriteString("float32")
+	case meta.FieldType_Float64:
+		b.WriteString("float64")
+	default:
+		b.WriteString("unknown extend type:" + self.Type.String())
+	}
+
+	return b.String()
+}
+
+func (self *fieldModel) GoFieldName() string {
+
+	var pname string
+
+	// 扩展类型不能直接访问
+	if self.IsExtendType() {
+		pname = "Extend_" + self.Name
+	} else {
+		pname = publicFieldName(self.Name)
+	}
 
 	// 碰到关键字在尾部加_
 	if token.Lookup(pname).IsKeyword() {
@@ -94,6 +162,10 @@ func (self *fieldModel) GoTypeName() string {
 	case meta.FieldType_Struct,
 		meta.FieldType_Enum:
 		b.WriteString(self.Complex.Name)
+	case meta.FieldType_Float32:
+		b.WriteString("int32")
+	case meta.FieldType_Float64:
+		b.WriteString("int64")
 	default:
 		b.WriteString(self.Type.String())
 	}
@@ -113,6 +185,8 @@ func (self *fieldModel) GoTags() string {
 		meta.FieldType_Int64,
 		meta.FieldType_UInt32,
 		meta.FieldType_UInt64,
+		meta.FieldType_Float32,
+		meta.FieldType_Float64,
 		meta.FieldType_Enum:
 		b.WriteString("integer")
 	default:

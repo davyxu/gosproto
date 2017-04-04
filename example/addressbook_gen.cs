@@ -19,6 +19,7 @@ namespace example
 
 
 
+	
 	public class AddressBook : SprotoTypeBase {
 		private static int max_field_count = 1;
 		
@@ -27,6 +28,7 @@ namespace example
 		public bool HasPerson{
 			get { return base.has_field.has_field(0); }
 		}
+		
 		private List<Person> _person; // tag 0
 		public List<Person> person {
 			get{ return _person; }
@@ -69,14 +71,16 @@ namespace example
 		}
 	}
 
+	
 	public class MyData : SprotoTypeBase {
-		private static int max_field_count = 7;
+		private static int max_field_count = 9;
 		
 		
 		[SprotoHasField]
 		public bool HasName{
 			get { return base.has_field.has_field(0); }
 		}
+		
 		private string _name; // tag 0
 		public string name {
 			get{ return _name; }
@@ -87,60 +91,88 @@ namespace example
 		public bool HasType{
 			get { return base.has_field.has_field(1); }
 		}
-		private MyCar _type; // tag 1
-		public MyCar type {
-			get{ return _type; }
-			set{ base.has_field.set_field(1,true); _type = value; }
+		
+		private MyCar _Type; // tag 1
+		public MyCar Type {
+			get{ return _Type; }
+			set{ base.has_field.set_field(1,true); _Type = value; }
 		}
 		
 		[SprotoHasField]
 		public bool HasInt32{
 			get { return base.has_field.has_field(2); }
 		}
-		private Int32 _int32; // tag 2
-		public Int32 int32 {
-			get{ return _int32; }
-			set{ base.has_field.set_field(2,true); _int32 = value; }
+		
+		private Int32 _Int32; // tag 2
+		public Int32 Int32 {
+			get{ return _Int32; }
+			set{ base.has_field.set_field(2,true); _Int32 = value; }
 		}
 		
 		[SprotoHasField]
 		public bool HasUint32{
 			get { return base.has_field.has_field(3); }
 		}
-		private UInt32 _uint32; // tag 3
-		public UInt32 uint32 {
-			get{ return _uint32; }
-			set{ base.has_field.set_field(3,true); _uint32 = value; }
+		
+		private UInt32 _Uint32; // tag 3
+		public UInt32 Uint32 {
+			get{ return _Uint32; }
+			set{ base.has_field.set_field(3,true); _Uint32 = value; }
 		}
 		
 		[SprotoHasField]
 		public bool HasInt64{
 			get { return base.has_field.has_field(4); }
 		}
-		private Int64 _int64; // tag 4
-		public Int64 int64 {
-			get{ return _int64; }
-			set{ base.has_field.set_field(4,true); _int64 = value; }
+		
+		private Int64 _Int64; // tag 4
+		public Int64 Int64 {
+			get{ return _Int64; }
+			set{ base.has_field.set_field(4,true); _Int64 = value; }
 		}
 		
 		[SprotoHasField]
 		public bool HasUint64{
 			get { return base.has_field.has_field(5); }
 		}
-		private UInt64 _uint64; // tag 5
-		public UInt64 uint64 {
-			get{ return _uint64; }
-			set{ base.has_field.set_field(5,true); _uint64 = value; }
+		
+		private UInt64 _Uint64; // tag 5
+		public UInt64 Uint64 {
+			get{ return _Uint64; }
+			set{ base.has_field.set_field(5,true); _Uint64 = value; }
 		}
 		
 		[SprotoHasField]
 		public bool HasBool{
 			get { return base.has_field.has_field(6); }
 		}
-		private bool _bool; // tag 6
-		public bool bool {
-			get{ return _bool; }
-			set{ base.has_field.set_field(6,true); _bool = value; }
+		
+		private bool _Bool; // tag 6
+		public bool Bool {
+			get{ return _Bool; }
+			set{ base.has_field.set_field(6,true); _Bool = value; }
+		}
+		
+		[SprotoHasField]
+		public bool HasFloat32{
+			get { return base.has_field.has_field(7); }
+		}
+		
+		private float _Float32; // tag 7
+		public float Float32 {
+			get{ return _Float32; }
+			set{ base.has_field.set_field(7,true); _Float32 = value; }
+		}
+		
+		[SprotoHasField]
+		public bool HasFloat64{
+			get { return base.has_field.has_field(8); }
+		}
+		
+		private double _Float64; // tag 8
+		public double Float64 {
+			get{ return _Float64; }
+			set{ base.has_field.set_field(8,true); _Float64 = value; }
 		}
 		
 		
@@ -160,27 +192,35 @@ namespace example
 					break;
 				
 				case 1:
-					this.type = base.deserialize.read_enum<MyCar>();
+					this.Type = base.deserialize.read_enum<MyCar>();
 					break;
 				
 				case 2:
-					this.int32 = base.deserialize.read_int32();
+					this.Int32 = base.deserialize.read_int32();
 					break;
 				
 				case 3:
-					this.uint32 = base.deserialize.read_uint32();
+					this.Uint32 = base.deserialize.read_uint32();
 					break;
 				
 				case 4:
-					this.int64 = base.deserialize.read_int64();
+					this.Int64 = base.deserialize.read_int64();
 					break;
 				
 				case 5:
-					this.uint64 = base.deserialize.read_uint64();
+					this.Uint64 = base.deserialize.read_uint64();
 					break;
 				
 				case 6:
-					this.bool = base.deserialize.read_boolean();
+					this.Bool = base.deserialize.read_boolean();
+					break;
+				
+				case 7:
+					this.Float32 = base.deserialize.read_float32();
+					break;
+				
+				case 8:
+					this.Float64 = base.deserialize.read_double();
 					break;
 				
 				default:
@@ -199,27 +239,35 @@ namespace example
 			}
 			
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_enum(this.type, 1);
+				base.serialize.write_enum(this.Type, 1);
 			}
 			
 			if (base.has_field.has_field (2)) {
-				base.serialize.write_int32(this.int32, 2);
+				base.serialize.write_int32(this.Int32, 2);
 			}
 			
 			if (base.has_field.has_field (3)) {
-				base.serialize.write_uint32(this.uint32, 3);
+				base.serialize.write_uint32(this.Uint32, 3);
 			}
 			
 			if (base.has_field.has_field (4)) {
-				base.serialize.write_int64(this.int64, 4);
+				base.serialize.write_int64(this.Int64, 4);
 			}
 			
 			if (base.has_field.has_field (5)) {
-				base.serialize.write_uint64(this.uint64, 5);
+				base.serialize.write_uint64(this.Uint64, 5);
 			}
 			
 			if (base.has_field.has_field (6)) {
-				base.serialize.write_boolean(this.bool, 6);
+				base.serialize.write_boolean(this.Bool, 6);
+			}
+			
+			if (base.has_field.has_field (7)) {
+				base.serialize.write_float32(this.Float32, 7);
+			}
+			
+			if (base.has_field.has_field (8)) {
+				base.serialize.write_double(this.Float64, 8);
 			}
 			
 
@@ -227,6 +275,7 @@ namespace example
 		}
 	}
 
+	
 	public class MyProfile : SprotoTypeBase {
 		private static int max_field_count = 3;
 		
@@ -235,6 +284,7 @@ namespace example
 		public bool HasNameField{
 			get { return base.has_field.has_field(0); }
 		}
+		
 		private MyData _nameField; // tag 0
 		public MyData nameField {
 			get{ return _nameField; }
@@ -245,6 +295,7 @@ namespace example
 		public bool HasNameArray{
 			get { return base.has_field.has_field(1); }
 		}
+		
 		private List<MyData> _nameArray; // tag 1
 		public List<MyData> nameArray {
 			get{ return _nameArray; }
@@ -255,6 +306,7 @@ namespace example
 		public bool HasNameMap{
 			get { return base.has_field.has_field(2); }
 		}
+		
 		private Dictionary<MyCar,MyData> _nameMap; // tag 2
 		public Dictionary<MyCar,MyData> nameMap {
 			get{ return _nameMap; }
@@ -282,7 +334,7 @@ namespace example
 					break;
 				
 				case 2:
-					this.nameMap = base.deserialize.read_map<MyCar,MyData>(v => v.type);
+					this.nameMap = base.deserialize.read_map<MyCar,MyData>(v => v.Type);
 					break;
 				
 				default:
@@ -313,6 +365,7 @@ namespace example
 		}
 	}
 
+	
 	public class Person : SprotoTypeBase {
 		private static int max_field_count = 4;
 		
@@ -321,6 +374,7 @@ namespace example
 		public bool HasName{
 			get { return base.has_field.has_field(0); }
 		}
+		
 		private string _name; // tag 0
 		public string name {
 			get{ return _name; }
@@ -331,6 +385,7 @@ namespace example
 		public bool HasId{
 			get { return base.has_field.has_field(1); }
 		}
+		
 		private Int32 _id; // tag 1
 		public Int32 id {
 			get{ return _id; }
@@ -341,6 +396,7 @@ namespace example
 		public bool HasEmail{
 			get { return base.has_field.has_field(2); }
 		}
+		
 		private string _email; // tag 2
 		public string email {
 			get{ return _email; }
@@ -351,6 +407,7 @@ namespace example
 		public bool HasPhone{
 			get { return base.has_field.has_field(3); }
 		}
+		
 		private List<PhoneNumber> _phone; // tag 3
 		public List<PhoneNumber> phone {
 			get{ return _phone; }
@@ -417,6 +474,7 @@ namespace example
 		}
 	}
 
+	
 	public class PhoneNumber : SprotoTypeBase {
 		private static int max_field_count = 2;
 		
@@ -425,6 +483,7 @@ namespace example
 		public bool HasNumber{
 			get { return base.has_field.has_field(0); }
 		}
+		
 		private string _number; // tag 0
 		public string number {
 			get{ return _number; }
@@ -435,6 +494,7 @@ namespace example
 		public bool HasType{
 			get { return base.has_field.has_field(1); }
 		}
+		
 		private Int32 _type; // tag 1
 		public Int32 type {
 			get{ return _type; }

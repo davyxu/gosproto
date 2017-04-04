@@ -22,14 +22,14 @@ func parseStructField(p *sprotoParser, d *Descriptor) {
 		fd.Tag = p.Expect(Token_Numeral).ToInt()
 	} else { // 没写就自动生成
 
-		//if len(d.Fields) == 0 {
-		//	fd.AutoTag = 0
-		//} else {
-		//	fd.AutoTag = d.MaxTag() + 1
-		//}
+		if len(d.Fields) == 0 {
+			fd.AutoTag = 0
+		} else {
+			fd.AutoTag = d.MaxTag() + 1
+		}
 
 		// 暂时兼容先用这个
-		fd.AutoTag = d.MaxTag() + 1
+		//fd.AutoTag = d.MaxTag() + 1
 
 	}
 

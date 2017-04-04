@@ -1,9 +1,9 @@
 package meta
 
 import (
-    "github.com/davyxu/golexer"
-    "fmt"
-    "errors"
+	"errors"
+	"fmt"
+	"github.com/davyxu/golexer"
 )
 
 type lazyField struct {
@@ -48,7 +48,7 @@ func (self *lazyField) resolve(pass int) (bool, error) {
 			self.fd.MainIndex = indexFd
 		} else {
 			if pass > 1 {
-				return true, errors.New("Main index not found:" + self.typeName)
+				return true, errors.New("Main index not found:" + self.mainIndexName)
 			} else {
 				return true, nil
 			}

@@ -74,9 +74,27 @@ type MyData struct {
 	Uint64 uint64 `sproto:"integer,5,name=Uint64"`
 
 	Bool bool `sproto:"boolean,6,name=Bool"`
+
+	Extend_Float32 int32 `sproto:"integer,7,name=Extend_Float32"`
+
+	Extend_Float64 int64 `sproto:"integer,8,name=Extend_Float64"`
 }
 
 func (self *MyData) String() string { return goobjfmt.CompactTextString(self) }
+
+func (self *MyData) Float32() float32 {
+	return float32(self.Extend_Float32) * 0.001000
+}
+func (self *MyData) SetFloat32(v float32) {
+	self.Extend_Float32 = int32(v * 1000)
+}
+
+func (self *MyData) Float64() float64 {
+	return float64(self.Extend_Float64) * 0.001000
+}
+func (self *MyData) SetFloat64(v float64) {
+	self.Extend_Float64 = int64(v * 1000)
+}
 
 type MyProfile struct {
 	NameField *MyData `sproto:"struct,0,name=NameField"`

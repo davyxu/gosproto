@@ -166,6 +166,10 @@ func (self *fieldModel) serializer() string {
 		baseName = "uint32"
 	case meta.FieldType_UInt64:
 		baseName = "uint64"
+	case meta.FieldType_Float32:
+		baseName = "float32"
+	case meta.FieldType_Float64:
+		baseName = "double"
 	case meta.FieldType_String:
 		baseName = "string"
 	case meta.FieldType_Bool:
@@ -198,6 +202,10 @@ func csharpTypeName(fd *meta.FieldDescriptor) string {
 		return "UInt32"
 	case meta.FieldType_UInt64:
 		return "UInt64"
+	case meta.FieldType_Float32:
+		return "float"
+	case meta.FieldType_Float64:
+		return "double"
 	case meta.FieldType_String:
 		return "string"
 	case meta.FieldType_Bool:
