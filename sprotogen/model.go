@@ -17,6 +17,8 @@ func (self *fieldModel) UpperName() string {
 	return strings.ToUpper(string(self.Name[0])) + self.Name[1:]
 }
 
+
+
 type structModel struct {
 	*meta.Descriptor
 

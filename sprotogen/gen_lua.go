@@ -27,6 +27,13 @@ local sproto = {
 	},
 	
 	IDByName = {},
+
+	ResetByID = { {{range .Structs}}
+		[{{.MsgID}}] = function( obj ) -- {{.Name}}
+			if obj == nil then return end {{range .StFields}}
+			obj.{{.Name}} = {{.LuaDefaultValueString}} {{end}}
+		end, {{end}}
+	},
 }
 
 local t = sproto.IDByName
@@ -37,6 +44,29 @@ end
 return sproto
 
 `
+
+func (self *fieldModel) LuaDefaultValueString() string {
+
+	switch self.Type {
+	case meta.FieldType_Bool:
+		return "false"
+	case meta.FieldType_Int32,
+		meta.FieldType_Int64,
+		meta.FieldType_UInt32,
+		meta.FieldType_UInt64,
+		meta.FieldType_Integer,
+		meta.FieldType_Float32,
+		meta.FieldType_Float64,
+		meta.FieldType_Enum:
+		return "0"
+	case meta.FieldType_String:
+		return "\"\""
+	case meta.FieldType_Struct:
+		return "nil"
+	}
+
+	return "unknown type" + self.Type.String()
+}
 
 func gen_lua(fileD *meta.FileDescriptor, packageName, filename string) {
 
