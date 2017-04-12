@@ -26,16 +26,16 @@ const (	{{range .StFields}}
 	{{$enumobj.Name}}_{{.Name}} {{$enumobj.Name}} = {{.TagNumber}} {{end}}
 )
 
-var {{$enumobj.Name}}_ValueByName = map[string]int32{ {{range .StFields}}
+var {{$enumobj.Name}}MapperValueByName = map[string]int32{ {{range .StFields}}
 	"{{.Name}}": {{.TagNumber}}, {{end}}
 }
 
-var {{$enumobj.Name}}_NameByValue = map[int32]string{ {{range .StFields}}
+var {{$enumobj.Name}}MapperNameByValue = map[int32]string{ {{range .StFields}}
 	{{.TagNumber}}: "{{.Name}}" , {{end}}
 }
 
 func (self {{$enumobj.Name}}) String() string {
-	return sproto.EnumName({{$enumobj.Name}}_NameByValue, int32(self))
+	return sproto.EnumName({{$enumobj.Name}}MapperNameByValue, int32(self))
 }
 {{end}}
 
