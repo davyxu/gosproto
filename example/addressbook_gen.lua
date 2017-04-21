@@ -89,7 +89,7 @@ local sproto = {
 			obj.Bool = false 
 			obj.Float32 = 0 
 			obj.Float64 = 0 
-			obj.Stream = unknown typebytes 
+			obj.Stream = nil 
 		end, 
 		[438153711] = function( obj ) -- MyProfile
 			if obj == nil then return end 

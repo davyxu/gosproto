@@ -61,7 +61,8 @@ func (self *fieldModel) LuaDefaultValueString() string {
 		return "0"
 	case meta.FieldType_String:
 		return "\"\""
-	case meta.FieldType_Struct:
+	case meta.FieldType_Struct,
+		meta.FieldType_Bytes:
 		return "nil"
 	}
 
