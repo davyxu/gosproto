@@ -73,7 +73,7 @@ namespace example
 
 	
 	public class MyData : SprotoTypeBase {
-		private static int max_field_count = 9;
+		private static int max_field_count = 10;
 		
 		
 		[SprotoHasField]
@@ -175,6 +175,17 @@ namespace example
 			set{ base.has_field.set_field(8,true); _Float64 = value; }
 		}
 		
+		[SprotoHasField]
+		public bool HasStream{
+			get { return base.has_field.has_field(9); }
+		}
+		
+		private byte[] _Stream; // tag 9
+		public byte[] Stream {
+			get{ return _Stream; }
+			set{ base.has_field.set_field(9,true); _Stream = value; }
+		}
+		
 		
 		public MyData() : base(max_field_count) {}
 		
@@ -223,6 +234,10 @@ namespace example
 					this.Float64 = base.deserialize.read_double();
 					break;
 				
+				case 9:
+					this.Stream = base.deserialize.read_bytes();
+					break;
+				
 				default:
 					base.deserialize.read_unknow_data ();
 					break;
@@ -268,6 +283,10 @@ namespace example
 			
 			if (base.has_field.has_field (8)) {
 				base.serialize.write_double(this.Float64, 8);
+			}
+			
+			if (base.has_field.has_field (9)) {
+				base.serialize.write_bytes(this.Stream, 9);
 			}
 			
 

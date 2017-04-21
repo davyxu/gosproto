@@ -38,6 +38,7 @@ func TestMyProfile(t *testing.T) {
 		Uint32: math.MaxUint32,
 		Int64:  math.MaxInt64,
 		Uint64: math.MaxUint64,
+		Stream: []byte{1, 2, 3, 4},
 	}
 
 	input.SetFloat32(3.14159265)

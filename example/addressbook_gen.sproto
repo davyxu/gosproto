@@ -48,6 +48,8 @@
 	
 	Float64 8 : integer
 	
+	Stream 9 : string
+	
 }
 
 .MyProfile {

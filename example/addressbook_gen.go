@@ -18,20 +18,20 @@ const (
 	MyCar_Pig    MyCar = 3
 )
 
-var MyCar_ValueByName = map[string]int32{
+var MyCarMapperValueByName = map[string]int32{
 	"Monkey": 1,
 	"Monk":   2,
 	"Pig":    3,
 }
 
-var MyCar_NameByValue = map[int32]string{
+var MyCarMapperNameByValue = map[int32]string{
 	1: "Monkey",
 	2: "Monk",
 	3: "Pig",
 }
 
 func (self MyCar) String() string {
-	return sproto.EnumName(MyCar_NameByValue, int32(self))
+	return sproto.EnumName(MyCarMapperNameByValue, int32(self))
 }
 
 type PhoneNumber struct {
@@ -78,6 +78,8 @@ type MyData struct {
 	Extend_Float32 int32 `sproto:"integer,7,name=Extend_Float32"`
 
 	Extend_Float64 int64 `sproto:"integer,8,name=Extend_Float64"`
+
+	Stream []byte `sproto:"string,9,name=Stream"`
 }
 
 func (self *MyData) String() string { return goobjfmt.CompactTextString(self) }

@@ -166,6 +166,8 @@ func (self *fieldModel) GoTypeName() string {
 		b.WriteString("int32")
 	case meta.FieldType_Float64:
 		b.WriteString("int64")
+	case meta.FieldType_Bytes:
+		b.WriteString("[]byte")
 	default:
 		b.WriteString(self.Type.String())
 	}
@@ -189,6 +191,8 @@ func (self *fieldModel) GoTags() string {
 		meta.FieldType_Float64,
 		meta.FieldType_Enum:
 		b.WriteString("integer")
+	case meta.FieldType_Bytes:
+		b.WriteString("string")
 	default:
 		b.WriteString(self.Kind())
 	}

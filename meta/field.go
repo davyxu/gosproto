@@ -112,6 +112,8 @@ func (self *FieldDescriptor) CompatibleTypeName() string {
 		FieldType_Float64,
 		FieldType_Enum:
 		return FieldType_Integer.String()
+	case FieldType_Bytes:
+		return FieldType_String.String()
 	default:
 		return self.Type.String()
 	}

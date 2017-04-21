@@ -19,6 +19,7 @@ const (
 	FieldType_Enum
 	FieldType_Float32
 	FieldType_Float64
+	FieldType_Bytes
 )
 
 var fieldtypeByStr = map[string]FieldType{
@@ -33,6 +34,7 @@ var fieldtypeByStr = map[string]FieldType{
 	"enum":    FieldType_Enum,
 	"float32": FieldType_Float32,
 	"float64": FieldType_Float64,
+	"bytes":   FieldType_Bytes,
 }
 
 var strByFieldtype = map[FieldType]string{}

@@ -62,6 +62,8 @@ message MyData {
 	Float32 float32     // [ExtendPrecision]100  # 手动设置精度, 默认1000
 
 	Float64 float64
+
+	Stream bytes
 		
 }
 

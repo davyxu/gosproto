@@ -178,6 +178,8 @@ func (self *fieldModel) serializer() string {
 		baseName = "obj"
 	case meta.FieldType_Enum:
 		baseName = "enum"
+	case meta.FieldType_Bytes:
+		baseName = "bytes"
 	default:
 		baseName = "unknown"
 	}
@@ -210,6 +212,8 @@ func csharpTypeName(fd *meta.FieldDescriptor) string {
 		return "string"
 	case meta.FieldType_Bool:
 		return "bool"
+	case meta.FieldType_Bytes:
+		return "byte[]"
 	case meta.FieldType_Struct,
 		meta.FieldType_Enum:
 		return fd.Complex.Name
