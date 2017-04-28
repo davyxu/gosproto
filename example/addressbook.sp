@@ -34,11 +34,11 @@ message AddressBook {
 
 enum MyCar {
 	
-	Monkey = 1
+	Monkey
 		
-	Monk = 2
+	Monk
 		
-	Pig = 3
+	Pig
 		
 }
 

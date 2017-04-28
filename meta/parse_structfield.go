@@ -28,9 +28,6 @@ func parseStructField(p *sprotoParser, d *Descriptor) {
 			fd.AutoTag = d.MaxTag() + 1
 		}
 
-		// 暂时兼容先用这个
-		//fd.AutoTag = d.MaxTag() + 1
-
 	}
 
 	if p.TokenID() == Token_Colon {

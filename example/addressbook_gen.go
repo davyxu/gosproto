@@ -13,21 +13,21 @@ import (
 type MyCar int32
 
 const (
-	MyCar_Monkey MyCar = 1
-	MyCar_Monk   MyCar = 2
-	MyCar_Pig    MyCar = 3
+	MyCar_Monkey MyCar = 0
+	MyCar_Monk   MyCar = 1
+	MyCar_Pig    MyCar = 2
 )
 
 var MyCarMapperValueByName = map[string]int32{
-	"Monkey": 1,
-	"Monk":   2,
-	"Pig":    3,
+	"Monkey": 0,
+	"Monk":   1,
+	"Pig":    2,
 }
 
 var MyCarMapperNameByValue = map[int32]string{
-	1: "Monkey",
-	2: "Monk",
-	3: "Pig",
+	0: "Monkey",
+	1: "Monk",
+	2: "Pig",
 }
 
 func (self MyCar) String() string {
@@ -115,6 +115,10 @@ var SProtoStructs = []reflect.Type{
 	reflect.TypeOf((*AddressBook)(nil)).Elem(), // 2618161298
 	reflect.TypeOf((*MyData)(nil)).Elem(),      // 2244887298
 	reflect.TypeOf((*MyProfile)(nil)).Elem(),   // 438153711
+}
+
+var SProtoEnumValue = map[string]map[int32]string{
+	"MyCar": MyCarMapperNameByValue,
 }
 
 func init() {

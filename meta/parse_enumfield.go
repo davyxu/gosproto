@@ -15,11 +15,22 @@ func parseEnumField(p *sprotoParser, d *Descriptor) {
 		panic(errors.New("Duplicate field name: " + d.Name))
 	}
 
-	// =
-	p.Expect(Token_Assign)
+	// 有等号
+	if p.TokenID() == Token_Assign {
+		p.NextToken()
 
-	// tag
-	fd.Tag = p.Expect(Token_Numeral).ToInt()
+		// tag
+		fd.Tag = p.Expect(Token_Numeral).ToInt()
+
+	} else {
+
+		if len(d.Fields) == 0 {
+			fd.AutoTag = 0
+		} else {
+			fd.AutoTag = d.MaxTag() + 1
+		}
+
+	}
 
 	fd.Type = FieldType_Int32
 

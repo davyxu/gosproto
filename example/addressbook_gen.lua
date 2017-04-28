@@ -4,9 +4,9 @@
 Enum = {
 
 	MyCar = { 
-		["Monkey"] = 1, 
-		["Monk"] = 2, 
-		["Pig"] = 3, 
+		["Monkey"] = 0, 
+		["Monk"] = 1, 
+		["Pig"] = 2, 
 	},
 	
 }

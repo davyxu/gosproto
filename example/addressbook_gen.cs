@@ -9,11 +9,11 @@ namespace example
 
 	public enum MyCar {
 		
-		Monkey = 1,
+		Monkey = 0,
 		
-		Monk = 2,
+		Monk = 1,
 		
-		Pig = 3,
+		Pig = 2,
 		
 	}
 
