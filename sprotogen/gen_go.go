@@ -63,6 +63,10 @@ var SProtoStructs = []reflect.Type{
 	reflect.TypeOf((*{{.Name}})(nil)).Elem(), // {{.MsgID}} {{end}}
 }
 
+var SProtoEnumValue = map[string]map[int32]string{ {{range .Enums}}
+	"{{.Name}}": {{.Name}}MapperNameByValue,{{end}}
+}
+
 {{if .CellnetReg}}
 func init() {
 	sprotocodec.AutoRegisterMessageMeta(SProtoStructs)
