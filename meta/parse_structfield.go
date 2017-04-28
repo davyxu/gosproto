@@ -81,7 +81,7 @@ func parseStructField(p *sprotoParser, d *Descriptor) {
 
 	// 尝试首次解析
 	if need2Pass, _ := pf.resolve(1); need2Pass {
-		d.File.unknownFields = append(d.File.unknownFields, pf)
+		d.File.FileSet.unknownFields = append(d.File.FileSet.unknownFields, pf)
 	}
 
 	checkField(d, fd)

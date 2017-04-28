@@ -7,7 +7,10 @@ import (
 	"io/ioutil"
 )
 
-func ParseFile(fileName string) (*FileDescriptor, error) {
+func ParseFile(fileName string) (*FileDescriptorSet, error) {
+
+	fileset := NewFileDescriptorSet()
+
 	fileD := NewFileDescriptor()
 
 	err := rawPaseFile(fileD, fileName)
@@ -15,30 +18,26 @@ func ParseFile(fileName string) (*FileDescriptor, error) {
 		return nil, err
 	}
 
-	return fileD, fileD.resolveAll()
+	fileset.addFile(fileD)
+
+	return fileset, fileset.resolveAll()
 }
 
-func ParseFileList(fileD *FileDescriptor, filelist []string) (string, error) {
+func ParseFileList(fileset *FileDescriptorSet, filelist []string) (string, error) {
 
 	for _, filename := range filelist {
+
+		fileD := NewFileDescriptor()
+		fileset.addFile(fileD)
+
 		if err := rawPaseFile(fileD, filename); err != nil {
 			return filename, err
 		}
+
 	}
 
-	return "", fileD.resolveAll()
+	return "", fileset.resolveAll()
 
-}
-
-func ParseString(data string) (*FileDescriptor, error) {
-
-	fileD := NewFileDescriptor()
-
-	if err := rawParse(fileD, data, data); err != nil {
-		return nil, err
-	}
-
-	return fileD, fileD.resolveAll()
 }
 
 // 从文件解析
@@ -74,11 +73,11 @@ func rawParse(fileD *FileDescriptor, data string, srcName string) (retErr error)
 			parseStruct(p, fileD, srcName)
 		case Token_Enum:
 			parseEnum(p, fileD, srcName)
+		case Token_FileTag:
+			parseFileTag(p, fileD, srcName)
 		default:
-			panic(errors.New("Expect '.' or 'enum'"))
+			panic(errors.New("Unknown token: " + p.TokenValue()))
 		}
-
-		p.NextToken()
 
 	}
 

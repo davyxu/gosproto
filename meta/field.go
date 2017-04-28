@@ -49,11 +49,19 @@ func (self *FieldDescriptor) ExtendTypePrecision() int {
 
 func (self *FieldDescriptor) TagNumber() int {
 
+	var tag int
+
 	if self.AutoTag == -1 {
-		return self.Tag
+		tag = self.Tag
+	} else {
+		tag = self.AutoTag
 	}
 
-	return self.AutoTag
+	if tag != 0 {
+		return self.Struct.TagBase + tag
+	}
+
+	return tag
 }
 
 func (self *FieldDescriptor) TypeString() string {
@@ -142,12 +150,8 @@ func (self *FieldDescriptor) parseType(name string) (ft FieldType, structType *D
 		return ft, nil
 	}
 
-	if d, ok := self.Struct.File.StructByName[name]; ok {
-		return FieldType_Struct, d
-	}
-
-	if d, ok := self.Struct.File.EnumByName[name]; ok {
-		return FieldType_Enum, d
+	if ft, structType = self.Struct.File.FileSet.parseType(name); ft != FieldType_None {
+		return ft, structType
 	}
 
 	return FieldType_None, nil

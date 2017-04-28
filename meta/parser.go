@@ -29,6 +29,7 @@ const (
 	Token_Dot         // .
 	Token_Enum        // Enum
 	Token_Message     // Message
+	Token_FileTag     // fileTag
 	Token_Assign      // =
 )
 
@@ -135,6 +136,7 @@ func newSProtoParser(srcName string) *sprotoParser {
 	l.AddMatcher(golexer.NewSignMatcher(Token_Colon, ":"))
 	l.AddMatcher(golexer.NewKeywordMatcher(Token_Enum, "enum"))
 	l.AddMatcher(golexer.NewKeywordMatcher(Token_Message, "message"))
+	l.AddMatcher(golexer.NewKeywordMatcher(Token_FileTag, "filetag"))
 
 	l.AddMatcher(golexer.NewIdentifierMatcher(Token_Identifier))
 

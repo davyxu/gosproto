@@ -24,6 +24,8 @@ type Descriptor struct {
 	FieldByTag  map[int]*FieldDescriptor
 
 	File *FileDescriptor
+
+	TagBase int
 }
 
 func (self *Descriptor) MaxTag() (ret int) {

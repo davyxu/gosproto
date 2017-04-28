@@ -17,8 +17,6 @@ func (self *fieldModel) UpperName() string {
 	return strings.ToUpper(string(self.Name[0])) + self.Name[1:]
 }
 
-
-
 type structModel struct {
 	*meta.Descriptor
 
@@ -47,7 +45,7 @@ func (self *structModel) FieldCount() int {
 }
 
 type fileModel struct {
-	*meta.FileDescriptor
+	*meta.FileDescriptorSet
 
 	Structs []*structModel
 
@@ -121,7 +119,14 @@ func addStruct(fm *fileModel, fileD *meta.FileDescriptor, srcName string) {
 	}
 }
 
-func addData(fm *fileModel, fileD *meta.FileDescriptor) {
+func addData(fm *fileModel, matchTag string) {
 
-	addStruct(fm, fileD, "")
+	for _, file := range fm.FileDescriptorSet.Files {
+
+		if file.MatchTag(matchTag) {
+			addStruct(fm, file, "")
+		}
+
+	}
+
 }

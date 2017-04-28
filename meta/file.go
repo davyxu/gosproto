@@ -14,18 +14,24 @@ type FileDescriptor struct {
 	ObjectsBySrcName map[string]*Descriptor
 	Objects          []*Descriptor
 
-	unknownFields []*lazyField
+	FileSet *FileDescriptorSet
+
+	fileTag []string
 }
 
-func (self *FileDescriptor) resolveAll() error {
+func (self *FileDescriptor) MatchTag(tag string) bool {
 
-	for _, v := range self.unknownFields {
-		if _, err := v.resolve(2); err != nil {
-			return err
+	if len(self.fileTag) == 0 {
+		return true
+	}
+
+	for _, libtag := range self.fileTag {
+		if tag == libtag {
+			return true
 		}
 	}
 
-	return nil
+	return false
 }
 
 func (self *FileDescriptor) String() string {
@@ -77,6 +83,20 @@ func (self *FileDescriptor) addObject(d *Descriptor, srcName string) {
 	self.Objects = append(self.Objects, d)
 
 	self.ObjectsBySrcName[srcName] = d
+}
+
+func (self *FileDescriptor) rawParseType(name string) (ft FieldType, structType *Descriptor) {
+
+	if d, ok := self.StructByName[name]; ok {
+		return FieldType_Struct, d
+	}
+
+	if d, ok := self.EnumByName[name]; ok {
+		return FieldType_Enum, d
+	}
+
+	return FieldType_None, nil
+
 }
 
 func NewFileDescriptor() *FileDescriptor {

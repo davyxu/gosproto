@@ -217,15 +217,15 @@ func (self *fieldModel) GoTags() string {
 	return b.String()
 }
 
-func gen_go(fileD *meta.FileDescriptor, packageName, filename string, cellnetReg bool) {
+func gen_go(fileset *meta.FileDescriptorSet, packageName, filename string, cellnetReg bool) {
 
 	fm := &fileModel{
-		FileDescriptor: fileD,
-		PackageName:    packageName,
-		CellnetReg:     cellnetReg,
+		FileDescriptorSet: fileset,
+		PackageName:       packageName,
+		CellnetReg:        cellnetReg,
 	}
 
-	addData(fm, fileD)
+	addData(fm,"go")
 
 	generateCode("sp->go", goCodeTemplate, filename, fm, &generateOption{
 		formatGoCode: true,

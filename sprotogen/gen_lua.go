@@ -69,14 +69,14 @@ func (self *fieldModel) LuaDefaultValueString() string {
 	return "unknown type" + self.Type.String()
 }
 
-func gen_lua(fileD *meta.FileDescriptor, packageName, filename string) {
+func gen_lua(fileset *meta.FileDescriptorSet, packageName, filename string) {
 
 	fm := &fileModel{
-		FileDescriptor: fileD,
-		PackageName:    packageName,
+		FileDescriptorSet: fileset,
+		PackageName:       packageName,
 	}
 
-	addData(fm, fileD)
+	addData(fm,"lua")
 
 	generateCode("sp->lua", luaCodeTemplate, filename, fm, nil)
 

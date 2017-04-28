@@ -8,51 +8,84 @@ import (
 	"github.com/davyxu/gosproto/meta"
 )
 
-var paramOut = flag.String("out", "", "output filename")
+var paramGoOut = flag.String("go_out", "", "golang output filename")
+var paramLuaOut = flag.String("lua_out", "", "lua output filename")
+var paramCSOut = flag.String("cs_out", "", "csharp output filename")
+var paramSprotoOut = flag.String("sproto_out", "", "standard sproto output filename")
 var paramPackage = flag.String("package", "", "package name in go files")
-var paramType = flag.String("type", "", "output file type")
 var paramCellnetReg = flag.Bool("cellnet_reg", false, "for type go, generate sproto auto register entry for github.com/davyxu/cellnet")
 var paramForceAutoTag = flag.Bool("forceatag", false, "no ouput field tag in sp mode")
 var paramCSClassAttr = flag.String("cs_classattr", "", "add given string to class header as attribute in c sharp file")
 var paramCSFieldAttr = flag.String("cs_fieldattr", "", "add given string to class private field as attribute in c sharp file")
+var paramEnumValueOffsetGroup = flag.Int("enumvalueoffsetgroup", 0, "added enum tag group value to original enum value which value is none zero")
+var paramVersion = flag.Bool("version", false, "Show version")
 
-func mergeSchema(filelist []string) *meta.FileDescriptor {
+func mergeSchema(filelist []string) *meta.FileDescriptorSet {
 
 	if len(filelist) == 0 {
 		fmt.Println("require sproto file")
 		os.Exit(1)
 	}
 
-	fileD := meta.NewFileDescriptor()
-	errorFileName, err := meta.ParseFileList(fileD, filelist)
+	fileSet := meta.NewFileDescriptorSet()
+	errorFileName, err := meta.ParseFileList(fileSet, filelist)
 	if err != nil {
 		fmt.Println(errorFileName, err.Error())
 		os.Exit(1)
 	}
 
-	return fileD
+	return fileSet
 }
+
+func enumValueOffset(fileset *meta.FileDescriptorSet) {
+
+	var enumIndex int
+
+	for _, file := range fileset.Files {
+
+		for _, e := range file.Enums {
+
+			if _, ok := e.MatchTag("EnumValueOffset"); ok {
+
+				e.TagBase = (enumIndex + 1) * (*paramEnumValueOffsetGroup)
+				enumIndex++
+			}
+
+		}
+	}
+
+}
+
+const Version = "0.1.0"
 
 func main() {
 
 	flag.Parse()
 
-	fileD := mergeSchema(flag.Args())
+	// 版本
+	if *paramVersion {
+		fmt.Println(Version)
+		return
+	}
 
-	switch *paramType {
-	case "go":
-		gen_go(fileD, *paramPackage, *paramOut, *paramCellnetReg)
-	case "sproto":
-		gen_sproto(fileD, *paramOut)
-	case "sp":
-		gen_sp(fileD, *paramForceAutoTag)
-	case "cs":
-		gen_csharp(fileD, *paramPackage, *paramOut, *paramCSClassAttr, *paramCSFieldAttr)
-	case "lua":
-		gen_lua(fileD, *paramPackage, *paramOut)
-	default:
-		fmt.Println("unknown out file type: ", *paramType)
-		os.Exit(1)
+	fileset := mergeSchema(flag.Args())
+
+	enumValueOffset(fileset)
+
+	if *paramGoOut != "" {
+		gen_go(fileset, *paramPackage, *paramGoOut, *paramCellnetReg)
+	}
+
+	if *paramLuaOut != "" {
+		gen_lua(fileset, *paramPackage, *paramLuaOut)
+	}
+
+	if *paramCSOut != "" {
+		gen_csharp(fileset, *paramPackage, *paramCSOut, *paramCSClassAttr, *paramCSFieldAttr)
+	}
+
+	if *paramSprotoOut != "" {
+		gen_sproto(fileset, *paramSprotoOut)
 	}
 
 }

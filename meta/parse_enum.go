@@ -27,6 +27,8 @@ func parseEnum(p *sprotoParser, fileD *FileDescriptor, srcName string) {
 
 	}
 
+	p.Expect(Token_CurlyBraceR)
+
 	// }
 
 	// 名字重复检查

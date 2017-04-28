@@ -91,17 +91,17 @@ func (self *structModel) TypeName() string {
 	return "none"
 }
 
-func gen_sp(fileD *meta.FileDescriptor, forceAutoTag bool) {
+func gen_sp(fileset *meta.FileDescriptorSet, forceAutoTag bool) {
 
-	for srcName, _ := range fileD.ObjectsBySrcName {
-		fm := &fileModel{
-			FileDescriptor: fileD,
-			forceAutoTag:   forceAutoTag,
-		}
-
-		addStruct(fm, fileD, srcName)
-
-		generateCode("sp->sp", spCodeTemplate, srcName, fm, nil)
-	}
+	//for srcName := range fileD.ObjectsBySrcName {
+	//	fm := &fileModel{
+	//		FileDescriptorSet: fileset,
+	//		forceAutoTag:      forceAutoTag,
+	//	}
+	//
+	//	addStruct(fm, fileD, srcName)
+	//
+	//	generateCode("sp->sp", spCodeTemplate, srcName, fm, nil)
+	//}
 
 }

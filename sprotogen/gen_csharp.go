@@ -256,16 +256,16 @@ func (self *structModel) CSClassAttr() string {
 	return self.f.CSClassAttr
 }
 
-func gen_csharp(fileD *meta.FileDescriptor, packageName, filename, classattr, fieldattr string) {
+func gen_csharp(fileset *meta.FileDescriptorSet, packageName, filename, classattr, fieldattr string) {
 
 	fm := &fileModel{
-		FileDescriptor: fileD,
-		PackageName:    packageName,
-		CSClassAttr:    classattr,
-		CSFieldAttr:    fieldattr,
+		FileDescriptorSet: fileset,
+		PackageName:       packageName,
+		CSClassAttr:       classattr,
+		CSFieldAttr:       fieldattr,
 	}
 
-	addData(fm, fileD)
+	addData(fm,"cs")
 
 	sort.Sort(fm)
 
