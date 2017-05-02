@@ -3,6 +3,8 @@ package meta
 import "bytes"
 
 type FileDescriptor struct {
+	FileName string
+
 	Structs []*Descriptor
 
 	StructByName map[string]*Descriptor

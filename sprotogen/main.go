@@ -17,7 +17,6 @@ var paramCellnetReg = flag.Bool("cellnet_reg", false, "for type go, generate spr
 var paramForceAutoTag = flag.Bool("forceatag", false, "no ouput field tag in sp mode")
 var paramCSClassAttr = flag.String("cs_classattr", "", "add given string to class header as attribute in c sharp file")
 var paramCSFieldAttr = flag.String("cs_fieldattr", "", "add given string to class private field as attribute in c sharp file")
-var paramEnumValueOffsetGroup = flag.Int("enumvalueoffsetgroup", 0, "added enum tag group value to original enum value which value is none zero")
 var paramVersion = flag.Bool("version", false, "Show version")
 
 func mergeSchema(filelist []string) *meta.FileDescriptorSet {
@@ -35,25 +34,6 @@ func mergeSchema(filelist []string) *meta.FileDescriptorSet {
 	}
 
 	return fileSet
-}
-
-func enumValueOffset(fileset *meta.FileDescriptorSet) {
-
-	var enumIndex int
-
-	for _, file := range fileset.Files {
-
-		for _, e := range file.Enums {
-
-			if _, ok := e.MatchTag("EnumValueOffset"); ok {
-
-				e.TagBase = (enumIndex + 1) * (*paramEnumValueOffsetGroup)
-				enumIndex++
-			}
-
-		}
-	}
-
 }
 
 const Version = "0.1.0"

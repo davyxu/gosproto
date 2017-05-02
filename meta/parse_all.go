@@ -12,6 +12,7 @@ func ParseFile(fileName string) (*FileDescriptorSet, error) {
 	fileset := NewFileDescriptorSet()
 
 	fileD := NewFileDescriptor()
+	fileD.FileName = fileName
 
 	err := rawPaseFile(fileD, fileName)
 	if err != nil {
@@ -28,6 +29,7 @@ func ParseFileList(fileset *FileDescriptorSet, filelist []string) (string, error
 	for _, filename := range filelist {
 
 		fileD := NewFileDescriptor()
+		fileD.FileName = filename
 		fileset.addFile(fileD)
 
 		if err := rawPaseFile(fileD, filename); err != nil {
