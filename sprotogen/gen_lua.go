@@ -74,6 +74,10 @@ func (self *structModel) LuaIsResultEnum() bool {
 
 func (self *fieldModel) LuaDefaultValueString() string {
 
+	if self.Repeatd {
+		return "nil"
+	}
+
 	switch self.Type {
 	case meta.FieldType_Bool:
 		return "false"
