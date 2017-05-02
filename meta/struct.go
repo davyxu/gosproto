@@ -26,6 +26,8 @@ type Descriptor struct {
 	File *FileDescriptor
 
 	TagBase int
+
+	EnumValueIgnoreType bool
 }
 
 func (self *Descriptor) MaxTag() (ret int) {

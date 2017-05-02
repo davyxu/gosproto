@@ -23,7 +23,7 @@ import (
 {{range $a, $enumobj := .Enums}}
 type {{.Name}} int32
 const (	{{range .StFields}}
-	{{$enumobj.Name}}_{{.Name}} {{$enumobj.Name}} = {{.TagNumber}} {{end}}
+	{{$enumobj.Name}}_{{.Name}} {{.GoEnumTypeName}} = {{.TagNumber}} {{end}}
 )
 
 var {{$enumobj.Name}}MapperValueByName = map[string]int32{ {{range .StFields}}
@@ -74,6 +74,15 @@ func init() {
 {{end}}
 
 `
+
+func (self *fieldModel) GoEnumTypeName() string {
+
+	if self.st.EnumValueIgnoreType {
+		return ""
+	}
+
+	return self.st.Name
+}
 
 func (self *fieldModel) GoExtendFieldGetterName() string {
 	pname := publicFieldName(self.Name)
@@ -217,15 +226,9 @@ func (self *fieldModel) GoTags() string {
 	return b.String()
 }
 
-func gen_go(fileset *meta.FileDescriptorSet, packageName, filename string, cellnetReg bool) {
+func gen_go(fm *fileModel, filename string) {
 
-	fm := &fileModel{
-		FileDescriptorSet: fileset,
-		PackageName:       packageName,
-		CellnetReg:        cellnetReg,
-	}
-
-	addData(fm,"go")
+	addData(fm, "go")
 
 	generateCode("sp->go", goCodeTemplate, filename, fm, &generateOption{
 		formatGoCode: true,

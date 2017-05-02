@@ -10,7 +10,9 @@ import (
 
 // 本文件内功能仅做项目内部功能使用, 不做通用功能
 
-func enumValueOffset(fileset *meta.FileDescriptorSet) {
+func enumValueOffset(fm *fileModel) {
+
+	fileset := fm.FileDescriptorSet
 
 	var allTagNumbers = map[int]*meta.FieldDescriptor{}
 
@@ -29,7 +31,14 @@ func enumValueOffset(fileset *meta.FileDescriptorSet) {
 
 			if strings.HasSuffix(e.Name, "Result") {
 
+				e.EnumValueIgnoreType = true
+
+				fmt.Printf("%s (%s)\n", e.Name, e.File.FileName)
+
 				for _, fd := range e.Fields {
+
+					fmt.Printf("   %s = %d\n", fd.Name, fd.TagNumber())
+
 					if fd.TagNumber() == 0 {
 						continue
 					}
@@ -46,6 +55,7 @@ func enumValueOffset(fileset *meta.FileDescriptorSet) {
 			}
 
 		}
+
 	}
 
 }

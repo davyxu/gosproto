@@ -62,6 +62,8 @@ type fileModel struct {
 	CSClassAttr string
 
 	CSFieldAttr string
+
+	EnumValueGroup bool
 }
 
 func (self *fileModel) Len() int {
