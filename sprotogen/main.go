@@ -53,7 +53,7 @@ func genFile(fileset *meta.FileDescriptorSet, generator func(*fileModel, string)
 	}
 
 	if *paramEnumValueGroup {
-		enumValueOffset(fm)
+		enumValueGroup(fm)
 	}
 
 	generator(fm, filename)

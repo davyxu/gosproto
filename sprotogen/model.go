@@ -25,6 +25,11 @@ type structModel struct {
 	f *fileModel
 }
 
+
+func (self *structModel) IsResultEnum() bool {
+	return self.IsEnum() && strings.HasSuffix(self.Name, "Result")
+}
+
 func (self *structModel) IsEnum() bool {
 	return self.Type == meta.DescriptorType_Enum
 }

@@ -18,6 +18,7 @@ import (
 	"github.com/davyxu/gosproto"
 	"github.com/davyxu/goobjfmt"
 	{{if .CellnetReg}}"github.com/davyxu/cellnet/codec/sproto"{{end}}
+	{{if .EnumValueGroup}}"fmt"{{end}}
 )
 
 {{range $a, $enumobj := .Enums}}
@@ -26,13 +27,15 @@ const (	{{range .StFields}}
 	{{$enumobj.Name}}_{{.Name}} {{.GoEnumTypeName}} = {{.TagNumber}} {{end}}
 )
 
-var {{$enumobj.Name}}MapperValueByName = map[string]int32{ {{range .StFields}}
+var (
+{{$enumobj.Name}}MapperValueByName = map[string]int32{ {{range .StFields}}
 	"{{.Name}}": {{.TagNumber}}, {{end}}
 }
 
-var {{$enumobj.Name}}MapperNameByValue = map[int32]string{ {{range .StFields}}
+{{$enumobj.Name}}MapperNameByValue = map[int32]string{ {{range .StFields}}
 	{{.TagNumber}}: "{{.Name}}" , {{end}}
 }
+)
 
 func (self {{$enumobj.Name}}) String() string {
 	return sproto.EnumName({{$enumobj.Name}}MapperNameByValue, int32(self))
@@ -67,6 +70,17 @@ var SProtoEnumValue = map[string]map[int32]string{ {{range .Enums}}
 	"{{.Name}}": {{.Name}}MapperNameByValue,{{end}}
 }
 
+{{if .EnumValueGroup}}
+func ResultToString(result int) string {
+	switch( result ) {
+		case 0: return "OK";
+	{{range $a, $enumObj := .Enums}} {{if .IsResultEnum}} {{range .Fields}} {{if ne .TagNumber 0}}
+		case {{.TagNumber}}: return "{{$enumObj.Name}}.{{.Name}}"; {{end}} {{end}} {{end}} {{end}}
+	}
+
+	return fmt.Sprintf("result: %d", result)
+}
+{{end}}
 {{if .CellnetReg}}
 func init() {
 	sprotocodec.AutoRegisterMessageMeta(SProtoStructs)

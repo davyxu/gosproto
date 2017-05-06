@@ -10,7 +10,7 @@ import (
 
 // 本文件内功能仅做项目内部功能使用, 不做通用功能
 
-func enumValueOffset(fm *fileModel) {
+func enumValueGroup(fm *fileModel) {
 
 	fileset := fm.FileDescriptorSet
 

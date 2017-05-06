@@ -88,6 +88,19 @@ namespace {{.PackageName}}
         {
             return _types;
         }
+{{if .EnumValueGroup}}
+        public static string ResultToString( int result )
+        {
+            switch( result)
+            {
+            	case 0: return "OK";
+			{{range $a, $enumObj := .Enums}} {{if .IsResultEnum}} {{range .Fields}} {{if ne .TagNumber 0}}
+				case {{.TagNumber}}: return "{{$enumObj.Name}}.{{.Name}}"; {{end}} {{end}} {{end}} {{end}}
+            }
+
+            return "Result: " + result.ToString();
+        }
+{{end}}
     }
 }
 `
