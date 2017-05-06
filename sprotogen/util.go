@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"text/template"
 )
@@ -52,6 +53,8 @@ func generateCode(templateName, templateStr, output string, model interface{}, o
 	opt.outputData = bf.Bytes()
 
 	if output != "" {
+
+		os.MkdirAll(filepath.Dir(output), 666)
 
 		err = ioutil.WriteFile(output, bf.Bytes(), 0666)
 
