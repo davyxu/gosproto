@@ -30,7 +30,7 @@ ResultByID = {
 Enum = {
 {{range $a, $enumObj := .Enums}}
 	{{$enumObj.Name}} = { {{range .Fields}}
-		["{{.Name}}"] = {{.TagNumber}}, {{end}}
+		{{.Name}} = {{.TagNumber}}, {{end}}
 	},
 	{{end}}
 }
