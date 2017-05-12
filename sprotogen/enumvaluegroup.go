@@ -14,6 +14,8 @@ func enumValueGroup(fm *fileModel) {
 
 	fileset := fm.FileDescriptorSet
 
+	var maxGroup int64
+
 	var allTagNumbers = map[int]*meta.FieldDescriptor{}
 
 	for _, file := range fileset.Files {
@@ -25,6 +27,10 @@ func enumValueGroup(fm *fileModel) {
 				if offset, err := strconv.ParseInt(strings.TrimSpace(rawValue), 10, 32); err == nil {
 
 					e.TagBase = int(offset)
+
+					if offset > maxGroup {
+						maxGroup = offset
+					}
 				}
 
 			}
@@ -33,11 +39,11 @@ func enumValueGroup(fm *fileModel) {
 
 				e.EnumValueIgnoreType = true
 
-				fmt.Printf("%s (%s)\n", e.Name, e.File.FileName)
+				//fmt.Printf("%s (%s)\n", e.Name, e.File.FileName)
 
 				for _, fd := range e.Fields {
 
-					fmt.Printf("   %s = %d\n", fd.Name, fd.TagNumber())
+					//fmt.Printf("   %s = %d\n", fd.Name, fd.TagNumber())
 
 					if fd.TagNumber() == 0 {
 						continue
@@ -57,5 +63,7 @@ func enumValueGroup(fm *fileModel) {
 		}
 
 	}
+
+	fmt.Printf("max group: %d\n", maxGroup)
 
 }
