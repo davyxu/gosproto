@@ -71,7 +71,7 @@ var SProtoEnumValue = map[string]map[int32]string{ {{range .Enums}}
 }
 
 {{if .EnumValueGroup}}
-func ResultToString(result int) string {
+func ResultToString(result int32) string {
 	switch( result ) {
 		case 0: return "OK";
 	{{range $a, $enumObj := .Enums}} {{if .IsResultEnum}} {{range .Fields}} {{if ne .TagNumber 0}}
