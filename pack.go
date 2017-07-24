@@ -29,6 +29,12 @@ func writeFF(dst, src []byte, n int) {
 	align8 := (n + 7) & (^7)
 	dst[0] = 0xff
 	dst[1] = uint8(align8/8 - 1)
+
+	// 修复超界: n超过了src的cap
+	if n > len(src) {
+		n = len(src)
+	}
+
 	copy(dst[2:], src[:n])
 	for i := n; i < align8; i++ {
 		dst[2+i] = 0
