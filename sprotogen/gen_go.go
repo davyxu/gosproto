@@ -15,7 +15,7 @@ package {{.PackageName}}
 
 import (
 	"reflect"
-	"github.com/davyxu/gosproto"
+	{{if gt (.Enums|len) 0}}"github.com/davyxu/gosproto"{{end}}
 	"github.com/davyxu/goobjfmt"
 	{{if .CellnetReg}}"github.com/davyxu/cellnet/codec/sproto"{{end}}
 	{{if .EnumValueGroup}}"fmt"{{end}}
