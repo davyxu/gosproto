@@ -16,7 +16,6 @@ package {{.PackageName}}
 import (
 	"reflect"
 	{{if gt (.Enums|len) 0}}"github.com/davyxu/gosproto"{{end}}
-	"github.com/davyxu/goobjfmt"
 	{{if .CellnetReg}}"github.com/davyxu/cellnet/codec/sproto"{{end}}
 	{{if .EnumValueGroup}}"fmt"{{end}}
 )
@@ -49,7 +48,7 @@ type {{.Name}} struct{
 	{{end}}
 }
 
-func (self *{{.Name}}) String() string { return goobjfmt.CompactTextString(self) }
+func (self *{{.Name}}) String() string { return fmt.Sprintf("%+v",*self) }
 
 {{range .StFields}}{{if .IsExtendType}}
 func (self *{{$stobj.Name}}) {{.GoExtendFieldGetterName}}() {{.GoExtendFieldGetterType}} {
