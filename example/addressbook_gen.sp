@@ -4,69 +4,63 @@
 
 enum MyCar {
 		
-	Monkey = 1 	
-	Monk = 2 	
-	Pig = 3 
+	Monkey
+	Monk
+	Pig
 }
 
+
+
+
+message PhoneNumber {
+
+	number string
+
+	type int32  
+}
+
+
+message Person {
+
+	name string  
+	
+	id  int32  
+	
+	email string
+	
+	phone PhoneNumber
+}
+
+message AddressBook {
+
+	person []Person
+}
 
 
 #  [agent] client -> battle # comment
-.PhoneNumber {
-	
-	#  头
-	number 0 : string #  哈哈 
-	#  哈哈
-#  头
-	type 1 : int32  
-}
-
-
-.Person {
+message MyData {
 	
 	
-	name 0 : string  
+	name string
 	
-	id 1 : int32  
+	type MyCar
 	
-	email 2 : string  
-	
-	phone 3 : *PhoneNumber  
-}
-
-
-.AddressBook {
-	
-	
-	person 0 : *Person  
-}
-
-
-.MyData {
-	
-	
-	name 0 string
-	
-	type 1 MyCar
-	
-	int32 2  int32 //  extend standard
+	int32 int32 //  extend standard
 	#  extend standard
-	uint32 4 uint32
+	uint32 uint32
 	
-	int64 5 : int64  
+	int64 int64  
 	
-	uint64 6 : uint64  
+	uint64 uint64  
 }
 
 
-.MyProfile {
+message MyProfile {
 	
 	
-	nameField 1 : MyData  
+	nameField MyData
 	
-	nameArray 2 : *MyData  
-	
-	nameMap 3 : *MyData(type)  
+	nameArray sMyData
 }
 
 

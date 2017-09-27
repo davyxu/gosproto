@@ -17,7 +17,7 @@ import (
 	"reflect"
 	{{if gt (.Enums|len) 0}}"github.com/davyxu/gosproto"{{end}}
 	{{if .CellnetReg}}"github.com/davyxu/cellnet/codec/sproto"{{end}}
-	{{if .EnumValueGroup}}"fmt"{{end}}
+	"fmt"
 )
 
 {{range $a, $enumobj := .Enums}}

@@ -6,8 +6,8 @@ package example
 import (
 	"reflect"
 	"github.com/davyxu/gosproto"
-	"github.com/davyxu/goobjfmt"
 	"github.com/davyxu/cellnet/codec/sproto"
+	"fmt"
 )
 
 type MyCar int32
@@ -18,17 +18,19 @@ const (
 	MyCar_Pig    MyCar = 2
 )
 
-var MyCarMapperValueByName = map[string]int32{
-	"Monkey": 0,
-	"Monk":   1,
-	"Pig":    2,
-}
+var (
+	MyCarMapperValueByName = map[string]int32{
+		"Monkey": 0,
+		"Monk":   1,
+		"Pig":    2,
+	}
 
-var MyCarMapperNameByValue = map[int32]string{
-	0: "Monkey",
-	1: "Monk",
-	2: "Pig",
-}
+	MyCarMapperNameByValue = map[int32]string{
+		0: "Monkey",
+		1: "Monk",
+		2: "Pig",
+	}
+)
 
 func (self MyCar) String() string {
 	return sproto.EnumName(MyCarMapperNameByValue, int32(self))
@@ -40,7 +42,7 @@ type PhoneNumber struct {
 	Type int32 `sproto:"integer,1,name=Type"`
 }
 
-func (self *PhoneNumber) String() string { return goobjfmt.CompactTextString(self) }
+func (self *PhoneNumber) String() string { return fmt.Sprintf("%+v", *self) }
 
 type Person struct {
 	Name string `sproto:"string,0,name=Name"`
@@ -52,13 +54,13 @@ type Person struct {
 	Phone []*PhoneNumber `sproto:"struct,3,array,name=Phone"`
 }
 
-func (self *Person) String() string { return goobjfmt.CompactTextString(self) }
+func (self *Person) String() string { return fmt.Sprintf("%+v", *self) }
 
 type AddressBook struct {
 	Person []*Person `sproto:"struct,0,array,name=Person"`
 }
 
-func (self *AddressBook) String() string { return goobjfmt.CompactTextString(self) }
+func (self *AddressBook) String() string { return fmt.Sprintf("%+v", *self) }
 
 type MyData struct {
 	Name string `sproto:"string,0,name=Name"`
@@ -82,7 +84,7 @@ type MyData struct {
 	Stream []byte `sproto:"string,9,name=Stream"`
 }
 
-func (self *MyData) String() string { return goobjfmt.CompactTextString(self) }
+func (self *MyData) String() string { return fmt.Sprintf("%+v", *self) }
 
 func (self *MyData) Float32() float32 {
 	return float32(self.Extend_Float32) * 0.001000
@@ -106,7 +108,7 @@ type MyProfile struct {
 	NameMap []*MyData `sproto:"struct,2,array,name=NameMap"`
 }
 
-func (self *MyProfile) String() string { return goobjfmt.CompactTextString(self) }
+func (self *MyProfile) String() string { return fmt.Sprintf("%+v", *self) }
 
 var SProtoStructs = []reflect.Type{
 
