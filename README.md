@@ -10,6 +10,19 @@ https://github.com/davyxu/gosproto/blob/master/README_en.md
 
 https://github.com/xjdrew/gosproto
 
+
+# 有Google Protobuf, 为什么还要选择sproto?
+Google Protobuf是一个用途非常广泛的数据传输格式及标准,几乎支持所有地球上的编程语言.
+Protobuf 3.0版本的很多设计也是非常优秀的.但是和C++多年发展类似的,Protobuf承载了太多的历史包袱.
+除了格式复杂,到描述文件,插件体系的设计都不能满足一些性能领域或者特殊领域的特别要求.
+
+使用Unity配合Lua制作游戏的团队中,很多也使用Protobuf.但是Protobuf的二进制复杂格式在Lua层上造成了很大的GC和性能问题.
+云风自己的pbc也不能完全与官方Protobuf二进制兼容.
+
+同为云风出品的sproto格式设计精巧.以简单性能为第一需求,天生就为lua做特殊优化,无需担心性能问题.
+本库(gosproto)以及配套的代码生成工具(sprotogen)也正是基于云风的sproto二进制层基础上构建的一整套工具链.
+
+
 # 特性
 
 * 兼容云风版sproto格式,并扩充的格式,比Protobuf更方便, 更快
