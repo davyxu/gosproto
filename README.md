@@ -1,5 +1,7 @@
 # gosproto
-[sproto](https://github.com/cloudwu/sproto)云风的sproto协议描述文件及代码生成工具
+基于[云风的sproto](https://github.com/cloudwu/sproto)二进制标准上的描述文件及代码生成工具
+
+
 
 English Doc see below:
 https://github.com/davyxu/gosproto/blob/master/README_en.md
