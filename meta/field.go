@@ -31,7 +31,7 @@ func (self *FieldDescriptor) IsExtendType() bool {
 
 func (self *FieldDescriptor) ExtendTypePrecision() int {
 
-	var precision int = 1000
+	var precision = 1000
 	if precisionStr, ok := self.CommentGroup.MatchTag("ExtendPrecision"); ok {
 		if pcs, err := strconv.ParseInt(precisionStr, 10, 64); err == nil {
 			precision = int(pcs)
