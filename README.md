@@ -249,8 +249,8 @@ https://github.com/davyxu/gosproto/tree/master/pb2sproto
 
 感觉不错请star, 谢谢!
 
-博客: http://www.cppblog.com/sunicdavy
+开源讨论群: 527430600
 
-知乎: http://www.zhihu.com/people/sunicdavy
+知乎: [http://www.zhihu.com/people/sunicdavy](http://www.zhihu.com/people/sunicdavy)
 
 提交bug及特性: https://github.com/davyxu/gosproto/issues
